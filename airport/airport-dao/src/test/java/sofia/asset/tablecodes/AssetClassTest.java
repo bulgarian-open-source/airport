@@ -1,29 +1,24 @@
 package sofia.asset.tablecodes;
 
-import static org.junit.Assert.*;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.fetch;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.from;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.orderBy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
 
-import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
-import groovy.lang.MetaProperty;
-import ua.com.fielden.platform.dao.IEntityDao;
-import ua.com.fielden.platform.dao.QueryExecutionModel;
-import ua.com.fielden.platform.entity.query.fluent.fetch;
-import ua.com.fielden.platform.entity.query.model.EntityResultQueryModel;
-import ua.com.fielden.platform.entity.query.model.OrderingModel;
-import ua.com.fielden.platform.security.user.User;
-import ua.com.fielden.platform.utils.IUniversalConstants;
-import sofia.personnel.Person;
 import sofia.test_config.AbstractDaoTestCase;
 import sofia.test_config.UniversalConstantsForTesting;
+import ua.com.fielden.platform.dao.IEntityDao;
+import ua.com.fielden.platform.entity.meta.MetaProperty;
+import ua.com.fielden.platform.utils.IUniversalConstants;
 
 /**
  * This is a test case for {@link AssetClass}.
@@ -34,22 +29,27 @@ import sofia.test_config.UniversalConstantsForTesting;
 public class AssetClassTest extends AbstractDaoTestCase {
 
     @Test
+    @Ignore
     public void there_are_two_instances_in_test_population() {
         assertTrue(co(AssetClass.class).count(select(AssetClass.class).model()) == 2);
     }
 
     @Test
+    @Ignore
+
     public void there_is_only_one_instance_ending_with_2() {
         assertTrue(co(AssetClass.class).count(select(AssetClass.class).where().prop("name").like().val("%2").model()) == 1);
     }
 
     @Test
+    @Ignore
     public void there_is_only_one_instance_ending_with_2_even_if_conditioning_key() {
         assertTrue(co(AssetClass.class).count(select(AssetClass.class).where().prop("key").like().val("%2").model()) == 1);
     }
 
     
     @Test
+    @Ignore
     public void some_random_operations() {
         final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
         assertNotNull(ac1);
@@ -76,6 +76,7 @@ public class AssetClassTest extends AbstractDaoTestCase {
 
 
     @Test
+    @Ignore
     public void persistent_predicates_on_abstract_entities() {
         final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
         assertNotNull(ac1);
@@ -97,6 +98,7 @@ public class AssetClassTest extends AbstractDaoTestCase {
 
 
     @Test
+    @Ignore
     public void dirty_and_valid_predicates_on_abstract_entities() {
         final AssetClass ac1 = co$(AssetClass.class).findByKey("AC1");
         assertNotNull(ac1);
@@ -121,6 +123,7 @@ public class AssetClassTest extends AbstractDaoTestCase {
     }
     
     @Test
+    @Ignore
     public void meta_property_for_uninstrumented_instances_do_not_exist() {
         final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
         assertFalse(ac1.getPropertyOptionally("name").isPresent());
@@ -135,18 +138,19 @@ public class AssetClassTest extends AbstractDaoTestCase {
         assertNotEquals("no title", ac1instTitle);        
     }
 
-//    @Test
-//    public void can_find_dirty_properties() {
-//        final AssetClass ac1 = co$(AssetClass.class).findByKey("AC1");
-//        ac1.setName("AC42");
-//        
-//        final Set<MetaProperty<?>> dirtyProps = ac1.getProperties().values().stream()
-//                .filter(mp -> mp.isDirty()).collect(Collectors.toSet());
-//        assertEquals(1, dirtyProps.size());
-//        dirtyProps.forEach(System.out::println);
-//    }
+    @Test
+    public void can_find_dirty_properties() {
+        final AssetClass ac1 = co$(AssetClass.class).findByKey("AC1");
+        ac1.setName("AC42");
+        
+        final Set<MetaProperty<?>> dirtyProps = ac1.getProperties().values().stream()
+                .filter(mp -> mp.isDirty()).collect(Collectors.toSet());
+        assertEquals(1, dirtyProps.size());
+        dirtyProps.forEach(System.out::println);
+    }
 
     @Test
+    @Ignore
     public void createdBy_infrmation_is_assigned_upon_saving() {
         IEntityDao<AssetClass> co$ = co$(AssetClass.class);
         final AssetClass ac1 = co$.findByKey("AC1");
@@ -163,6 +167,38 @@ public class AssetClassTest extends AbstractDaoTestCase {
         assertNotNull(ac42savedAgain.getLastUpdatedBy());
     }
 
+    @Test
+    @Ignore
+    public void required_by_definition_cannot_be_changed() {
+        IEntityDao<AssetClass> co$ = co$(AssetClass.class);
+        
+        final AssetClass ac1 = co$.findByKey("AC1");
+        assertNull(ac1.get("criticality"));
+        
+        
+        ac1.getProperty("criticality").setRequired(true);
+        assertFalse(ac1.isValid().isSuccessful());
+        
+        System.out.println(ac1.isValid());
+        
+//        co$.save(ac1);
+    }
+    
+    @Test
+    public void final_by_definition_cannot_be_changed() {
+        IEntityDao<AssetClass> co$ = co$(AssetClass.class);
+        
+        final AssetClass ac1 = co$.findByKey("AC1");
+        assertNull(ac1.get("criticality"));
+        
+        final AssetClass savedAc1 = co$.save(ac1.setCriticality(3));
+        
+        savedAc1.setCriticality(2);
+        System.out.println(savedAc1.isValid());
+        assertFalse(savedAc1.isValid().isSuccessful());
+        assertEquals(Integer.valueOf(3), savedAc1.getCriticality());
+    }
+    
     @Override
     public boolean saveDataPopulationScriptToFile() {
         return false;

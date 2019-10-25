@@ -10,7 +10,9 @@ import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
+import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
+import ua.com.fielden.platform.entity.validation.annotation.Final;
 import ua.com.fielden.platform.entity.annotation.DescTitle;
 import ua.com.fielden.platform.entity.annotation.DisplayDescription;
 import ua.com.fielden.platform.entity.annotation.IsProperty;
@@ -55,6 +57,25 @@ public class AssetClass extends AbstractPersistentEntity<DynamicEntityKey> {
     public String getName() {
         return name;
     }
+    
+    @IsProperty
+    @MapTo
+    @Title(value = "Criticaly", desc = "Indicates how critical assets of this class are.")
+    @Final
+    private Integer criticality;
+
+    @Observable
+    public AssetClass setCriticality(final Integer criticality) {
+        this.criticality = criticality;
+        return this;
+    }
+
+    public Integer getCriticality() {
+        return criticality;
+    }
+
+    
+
 
     @Override
     @Observable
