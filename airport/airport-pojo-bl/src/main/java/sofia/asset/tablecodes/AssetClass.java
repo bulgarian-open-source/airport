@@ -1,5 +1,6 @@
 package sofia.asset.tablecodes;
 
+import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
@@ -24,12 +25,7 @@ import ua.com.fielden.platform.utils.Pair;
  *
  */
 
-/**
- * Master entity object.
- *
- * @author Developers
- *
- */
+
 
 @KeyType(DynamicEntityKey.class)
 @CompanionObject(IAssetClass.class)
@@ -43,7 +39,7 @@ public class AssetClass extends AbstractPersistentEntity<DynamicEntityKey> {
     private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetClass.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
-    
+
     @IsProperty
     @MapTo
     @Title(value = "Name", desc = "Asset class name")
@@ -60,4 +56,10 @@ public class AssetClass extends AbstractPersistentEntity<DynamicEntityKey> {
         return name;
     }
 
+    @Override
+    @Observable
+    public AssetClass setDesc(String desc) {
+        super.setDesc(desc);
+        return this;
+    }
 }
