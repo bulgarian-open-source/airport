@@ -2,6 +2,7 @@ package sofia.asset.tablecodes;
 
 import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
+import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.KeyType;
 import ua.com.fielden.platform.entity.annotation.KeyTitle;
@@ -36,7 +37,8 @@ import ua.com.fielden.platform.utils.Pair;
 @DisplayDescription
 @DescRequired
 @KeyTitle("Asset Class")
-public class AssetClass extends AbstractPersistentEntity<DynamicEntityKey> {
+
+public class AssetClass extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetClass.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
