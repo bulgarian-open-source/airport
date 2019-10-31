@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
 
 import java.util.Set;
@@ -16,6 +17,8 @@ import org.junit.Test;
 
 import sofia.test_config.AbstractDaoTestCase;
 import sofia.test_config.UniversalConstantsForTesting;
+import sofia.validators.LongerThan2Validator;
+import sofia.validators.NoSpacesValidator;
 import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.entity.meta.MetaProperty;
 import ua.com.fielden.platform.utils.IUniversalConstants;
@@ -29,27 +32,41 @@ import ua.com.fielden.platform.utils.IUniversalConstants;
 public class AssetClassTest extends AbstractDaoTestCase {
 
     @Test
-    @Ignore
     public void there_are_two_instances_in_test_population() {
         assertTrue(co(AssetClass.class).count(select(AssetClass.class).model()) == 2);
     }
 
     @Test
-    @Ignore
-
     public void there_is_only_one_instance_ending_with_2() {
         assertTrue(co(AssetClass.class).count(select(AssetClass.class).where().prop("name").like().val("%2").model()) == 1);
     }
 
     @Test
-    @Ignore
     public void there_is_only_one_instance_ending_with_2_even_if_conditioning_key() {
         assertTrue(co(AssetClass.class).count(select(AssetClass.class).where().prop("key").like().val("%2").model()) == 1);
     }
 
-    
     @Test
-    @Ignore
+    public void asset_class_name_cannot_contain_spaces() {
+        final AssetClass ac1 = co$(AssetClass.class).findByKeyAndFetch(IAssetClass.FETCH_PROVIDER.fetchModel(), "AC1");
+        assertTrue(ac1.isValid().isSuccessful());
+        
+        ac1.setName("name with spaces");
+        assertFalse(ac1.isValid().isSuccessful());
+        assertEquals(NoSpacesValidator.ERR_NO_SPACES_ALLOWED, ac1.isValid().getMessage());
+    }
+
+    @Test
+    public void asset_class_name_cannot_be_shorte_than_3_characters() {
+        final AssetClass ac1 = co$(AssetClass.class).findByKeyAndFetch(IAssetClass.FETCH_PROVIDER.fetchModel(), "AC1");
+        assertTrue(ac1.isValid().isSuccessful());
+        
+        ac1.setName("AA");
+        assertFalse(ac1.isValid().isSuccessful());
+        assertFalse(ac1.getProperty("name").isValid());
+    }
+
+    @Test
     public void some_random_operations() {
         final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
         assertNotNull(ac1);
@@ -76,7 +93,6 @@ public class AssetClassTest extends AbstractDaoTestCase {
 
 
     @Test
-    @Ignore
     public void persistent_predicates_on_abstract_entities() {
         final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
         assertNotNull(ac1);
@@ -95,10 +111,43 @@ public class AssetClassTest extends AbstractDaoTestCase {
         final AssetClass ac3 = co(AssetClass.class).save(newAc3);
         assertTrue(ac3.isPersisted());
     }
+    
+    @Test
+    @Ignore
+    public void required_by_definition_cannot_be_changed() {
+        IEntityDao<AssetClass> co$ = co$(AssetClass.class);
+        
+        final AssetClass ac1 = co$.findByKey("AC1");
+        assertNull(ac1.get("criticality"));
+        
+        
+        ac1.getProperty("criticality").setRequired(true);
+        assertFalse(ac1.isValid().isSuccessful());
+        
+        System.out.println(ac1.isValid());
+        
+//        co$.save(ac1);
+    }
+    
+    @Test
+    @Ignore
+    public void final_by_definition_cannot_be_changed() {
+        IEntityDao<AssetClass> co$ = co$(AssetClass.class);
+        
+        final AssetClass ac1 = co$.findByKey("AC1");
+        assertNull(ac1.get("criticality"));
+        
+        final AssetClass savedAc1 = co$.save(ac1.setCriticality(3));
+        
+        savedAc1.setCriticality(2);
+        System.out.println(savedAc1.isValid());
+        assertFalse(savedAc1.isValid().isSuccessful());
+        assertEquals(Integer.valueOf(3), savedAc1.getCriticality());
+    }
+    
 
 
     @Test
-    @Ignore
     public void dirty_and_valid_predicates_on_abstract_entities() {
         final AssetClass ac1 = co$(AssetClass.class).findByKey("AC1");
         assertNotNull(ac1);
@@ -123,7 +172,6 @@ public class AssetClassTest extends AbstractDaoTestCase {
     }
     
     @Test
-    @Ignore
     public void meta_property_for_uninstrumented_instances_do_not_exist() {
         final AssetClass ac1 = co(AssetClass.class).findByKey("AC1");
         assertFalse(ac1.getPropertyOptionally("name").isPresent());
@@ -150,7 +198,6 @@ public class AssetClassTest extends AbstractDaoTestCase {
     }
 
     @Test
-    @Ignore
     public void createdBy_infrmation_is_assigned_upon_saving() {
         IEntityDao<AssetClass> co$ = co$(AssetClass.class);
         final AssetClass ac1 = co$.findByKey("AC1");
@@ -168,36 +215,22 @@ public class AssetClassTest extends AbstractDaoTestCase {
     }
 
     @Test
-    @Ignore
-    public void required_by_definition_cannot_be_changed() {
-        IEntityDao<AssetClass> co$ = co$(AssetClass.class);
+    public void requiredness_of_properties_defined_as_required_cannot_be_changed_at_runtime() {
+        final IEntityDao<AssetClass> co$ = co$(AssetClass.class);
         
         final AssetClass ac1 = co$.findByKey("AC1");
-        assertNull(ac1.get("criticality"));
+        assertNotNull(ac1.getDesc());
         
+        final MetaProperty<String> mpDesc = ac1.getProperty("desc");
+        assertTrue(mpDesc.isRequired());
         
-        ac1.getProperty("criticality").setRequired(true);
-        assertFalse(ac1.isValid().isSuccessful());
-        
-        System.out.println(ac1.isValid());
-        
-//        co$.save(ac1);
+        try {
+            mpDesc.setRequired(false);
+            fail("Changing defined requiredness at runtime shold have thrown an exception.");
+        } catch (final Exception ex) {
+        }
     }
-    
-    @Test
-    public void final_by_definition_cannot_be_changed() {
-        IEntityDao<AssetClass> co$ = co$(AssetClass.class);
-        
-        final AssetClass ac1 = co$.findByKey("AC1");
-        assertNull(ac1.get("criticality"));
-        
-        final AssetClass savedAc1 = co$.save(ac1.setCriticality(3));
-        
-        savedAc1.setCriticality(2);
-        System.out.println(savedAc1.isValid());
-        assertFalse(savedAc1.isValid().isSuccessful());
-        assertEquals(Integer.valueOf(3), savedAc1.getCriticality());
-    }
+
     
     @Override
     public boolean saveDataPopulationScriptToFile() {
@@ -227,7 +260,7 @@ public class AssetClassTest extends AbstractDaoTestCase {
 
         // AssetClass population for the test case
         save(new_composite(AssetClass.class, "AC1").setDesc("The first asset class"));
-        save(new_composite(AssetClass.class, "AC2").setDesc("The second asset class"));
+        save(new_composite(AssetClass.class, "AC2").setDesc("The second asset class").setCriticality(3));
     }
 
 }
