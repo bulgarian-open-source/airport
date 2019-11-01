@@ -12,6 +12,8 @@ import org.hibernate.dialect.H2Dialect;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import sofia.asset.tablecodes.AssetClass;
+import sofia.asset.tablecodes.AssetType;
 import sofia.config.ApplicationDomain;
 import sofia.personnel.Person;
 
@@ -79,7 +81,11 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         
         setupUser(User.system_users.SU, "sofia");
         setupPerson(User.system_users.SU, "sofia");
-
+        
+        final AssetClass as1 = (AssetClass) save(new_(AssetClass.class).setName("AC1").setDesc("First description.")).setActive(true);
+        save(new_(AssetClass.class).setName("AC2").setDesc("First description.")).setActive(true);
+        save(new_(AssetType.class).setName("AT1").setDesc("First description.")).setAssetClass(as1);
+        
         LOGGER.info("Completed database creation and population.");
 	}
 

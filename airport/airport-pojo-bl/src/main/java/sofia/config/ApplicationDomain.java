@@ -13,6 +13,7 @@ import ua.com.fielden.platform.entity.AbstractEntity;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
 import sofia.service.tablecodes.ServiceStatus;
+import sofia.assets.Asset;
 
 /**
  * A class to register domain entities.
@@ -30,6 +31,7 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(AssetClass.class);
         add(AssetType.class);
         add(ServiceStatus.class);
+        add(Asset.class);
     }
 
     private static void add(final Class<? extends AbstractEntity<?>> domainType) {
