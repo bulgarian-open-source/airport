@@ -11,6 +11,7 @@ import ua.com.fielden.platform.basic.config.IApplicationDomainProvider;
 import ua.com.fielden.platform.domain.PlatformDomainTypes;
 import ua.com.fielden.platform.entity.AbstractEntity;
 import sofia.asset.tablecodes.AssetClass;
+import sofia.asset.tablecodes.AssetType;
 import sofia.service.tablecodes.ServiceStatus;
 
 /**
@@ -27,6 +28,7 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         entityTypes.addAll(PlatformDomainTypes.types);
         add(Person.class);
         add(AssetClass.class);
+        add(AssetType.class);
         add(ServiceStatus.class);
     }
 
