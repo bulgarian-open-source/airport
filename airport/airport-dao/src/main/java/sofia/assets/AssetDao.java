@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import ua.com.fielden.platform.entity.fetch.IFetchProvider;
 import ua.com.fielden.platform.dao.annotations.SessionRequired;
@@ -38,13 +40,16 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
     
     @Override
     @SessionRequired
-    public Asset save(Asset asset) {
-        // TODO Auto-generated method stub
+    public Asset save(final Asset asset) {
+        // TODO implement a solution for a failed transaction where ID was already assigned
         if (!asset.isPersisted()) {
             final IKeyNumber coKeyNumber = co(KeyNumber.class);
-            final Integer nextNumber = coKeyNumber.nextNumber("ASSET_NUMBER");
-            asset.setNumber(nextNumber.toString());
-            }
+            String nextNumber = coKeyNumber.nextNumber("ASSET_NUMBER").toString();
+            String toAdd = IntStream.range(0, 6 - nextNumber.length())
+                    .mapToObj(x -> "0")
+                    .collect(Collectors.joining());
+            asset.setNumber(toAdd.concat(nextNumber));
+        }
         return super.save(asset);
     }
 
