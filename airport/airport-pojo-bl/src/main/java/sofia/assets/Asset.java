@@ -1,5 +1,6 @@
 package sofia.assets;
 
+import sofia.asset.tablecodes.AssetType;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
@@ -14,6 +15,7 @@ import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Readonly;
+import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
 import ua.com.fielden.platform.utils.Pair;
@@ -41,10 +43,29 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     @IsProperty
     @MapTo
-    @Title(value = "Number", desc = "A unique asset number, auto-generated.")
+    @Title(value = "number", desc = "A unique asset number, auto-generated.")
     @CompositeKeyMember(1)
     @Readonly
     private String number;
+    
+    @IsProperty
+    @MapTo
+    @Required
+    @Title(value = "assetType", desc = "An asset type for this asset.")
+    private AssetType assetType;
+
+    @Observable
+    public Asset setAssetType(final AssetType assetType) {
+        this.assetType = assetType;
+        return this;
+    }
+    
+    @Observable
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
+   
 
     @Observable
     public Asset setNumber(final String number) {

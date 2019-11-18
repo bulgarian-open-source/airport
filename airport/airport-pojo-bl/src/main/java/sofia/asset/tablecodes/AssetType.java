@@ -46,7 +46,7 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     @IsProperty
     @MapTo
-    @Title(value = "Asset Class", desc = "An asset calss for this type.")
+    @Title(value = "Asset Class", desc = "An asset class for this type.")
     private AssetClass assetClass;
 
     @Observable

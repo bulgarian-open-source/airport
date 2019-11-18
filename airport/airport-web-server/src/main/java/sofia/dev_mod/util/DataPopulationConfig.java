@@ -34,36 +34,36 @@ public final class DataPopulationConfig implements IDomainDrivenTestCaseConfigur
      * Default constructor is required for dynamic instantiation by {@link DbDrivenTestCase}.
      */
     public DataPopulationConfig(final Properties props) {
-    	// instantiate all the factories and Hibernate utility
-    	try {
-    	    // application properties
-    	    props.setProperty("app.name", "Sofia Airport Asset Management");
-    	    props.setProperty("reports.path", "");
-    	    props.setProperty("domain.path", "../airport-pojo-bl/target/classes");
-    	    props.setProperty("domain.package", "sofia");
-    	    props.setProperty("tokens.path", "../airport-pojo-bl/target/classes");
-    	    props.setProperty("tokens.package", "sofia.security.tokens");
-    	    props.setProperty("workflow", "development");
-    	    props.setProperty("email.smtp", "mail.sofia.com.bg");
-    	    props.setProperty("email.fromAddress", "airport_support@sofia.com.bg");
+        // instantiate all the factories and Hibernate utility
+        try {
+            // application properties
+            props.setProperty("app.name", "Helsinki Airport Asset Management");
+            props.setProperty("reports.path", "");
+            props.setProperty("domain.path", "../airport-pojo-bl/target/classes");
+            props.setProperty("domain.package", "helsinki");
+            props.setProperty("tokens.path", "../airport-pojo-bl/target/classes");
+            props.setProperty("tokens.package", "helsinki.security.tokens");
+            props.setProperty("workflow", "development");
+            props.setProperty("email.smtp", "mail.helsinki.com.ua");
+            props.setProperty("email.fromAddress", "airport_support@helsinki.com.ua");
 
-    	    final ApplicationDomain applicationDomainProvider = new ApplicationDomain();
-    	    module = new ApplicationServerModule(
-    	            HibernateSetup.getHibernateTypes(), 
-    	            applicationDomainProvider, 
-    	            applicationDomainProvider.domainTypes(), 
-    	            SerialisationClassProvider.class, 
+            final ApplicationDomain applicationDomainProvider = new ApplicationDomain();
+            module = new ApplicationServerModule(
+                    HibernateSetup.getHibernateTypes(), 
+                    applicationDomainProvider, 
+                    applicationDomainProvider.domainTypes(), 
+                    SerialisationClassProvider.class, 
                     NoDataFilter.class,
                     NoAuthorisation.class, 
-    	            props);
-    	    injector = new ApplicationInjectorFactory()
-    	            .add(module)
-    	            .add(new NewUserNotifierMockBindingModule())
-    	            .getInjector();
-    	    entityFactory = injector.getInstance(EntityFactory.class);
-    	} catch (final Exception e) {
-    	    throw new IllegalStateException("Could not create data population configuration.", e);
-    	}
+                    props);
+            injector = new ApplicationInjectorFactory()
+                    .add(module)
+                    .add(new NewUserNotifierMockBindingModule())
+                    .getInjector();
+            entityFactory = injector.getInstance(EntityFactory.class);
+        } catch (final Exception e) {
+            throw new IllegalStateException("Could not create data population configuration.", e);
+        }
     }
 
 
