@@ -86,4 +86,12 @@ public class AssetClass extends ActivatableAbstractEntity<DynamicEntityKey> {
         super.setDesc(desc);
         return this;
     }
+    
+    @Override
+    @Observable
+    public AssetClass setActive(boolean active) {
+        super.setActive(active);
+        return this;
+    }
+    
 }

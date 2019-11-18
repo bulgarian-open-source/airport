@@ -1,5 +1,6 @@
-package sofia.asset.tablecodes;
+package sofia.assets;
 
+import sofia.asset.tablecodes.AssetType;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
@@ -13,6 +14,8 @@ import ua.com.fielden.platform.entity.annotation.KeyType;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
+import ua.com.fielden.platform.entity.annotation.Readonly;
+import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
 import ua.com.fielden.platform.utils.Pair;
@@ -24,60 +27,54 @@ import ua.com.fielden.platform.utils.Pair;
  *
  */
 @KeyType(DynamicEntityKey.class)
-@KeyTitle("Asset Type")
-@CompanionObject(IAssetType.class)
+@KeyTitle("Asset Number")
+@CompanionObject(IAsset.class)
 @MapEntityTo
 @DescTitle("Description")
 @DisplayDescription
 @DescRequired
 // TODO: May need this later if some entities need to be automatically cascade-deactivated when this entity is deactivated
 // @DeactivatableDependencies({ Dependency1.class, Dependency2.class, Dependency3.class })
-public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
+public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
 
-    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetType.class);
+    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(Asset.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
-  
+
     @IsProperty
     @MapTo
-    @Title(value = "name", desc = "Asset Type name")
+    @Title(value = "number", desc = "A unique asset number, auto-generated.")
     @CompositeKeyMember(1)
-    private String name;
-
+    @Readonly
+    private String number;
+    
     @IsProperty
     @MapTo
-    @Title(value = "Asset Class", desc = "An asset class for this type.")
-    private AssetClass assetClass;
+    @Required
+    @Title(value = "assetType", desc = "An asset type for this asset.")
+    private AssetType assetType;
 
     @Observable
-    public AssetType setAssetClass(final AssetClass assetClass) {
-        this.assetClass = assetClass;
-        return this;
-    }
-
-    public AssetClass getAssetClass() {
-        return assetClass;
-    }
-
-    
-
-    
-    @Observable
-    public AssetType setName(final String name) {
-        this.name = name;
+    public Asset setAssetType(final AssetType assetType) {
+        this.assetType = assetType;
         return this;
     }
     
-
-    public String getName() {
-        return name;
-    }
-    
-    @Override
     @Observable
-    public AssetType setDesc(String desc) {
-        super.setDesc(desc);
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
+   
+
+    @Observable
+    public Asset setNumber(final String number) {
+        this.number = number;
         return this;
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     

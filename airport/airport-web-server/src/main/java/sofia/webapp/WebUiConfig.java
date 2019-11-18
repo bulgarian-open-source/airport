@@ -7,8 +7,10 @@ import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
+import sofia.assets.Asset;
 import sofia.webapp.config.asset.tablecodes.AssetClassWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeWebUiConfig;
+import sofia.webapp.config.assets.AssetWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ConditionRatingWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ServiceStatusWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
@@ -81,7 +83,12 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final AssetTypeWebUiConfig assetTypeWebUiConfig = AssetTypeWebUiConfig.register(injector(), builder);
         // Service Status table codes
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder);
+        
+        //Asset instance
+        final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
+
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
+
 
 
         // Configure application web resources such as masters and centres
@@ -96,36 +103,48 @@ public class WebUiConfig extends AbstractWebUiConfig {
 
         // Configure application menu
         configDesktopMainMenu().
-            addModule("Users / Personnel").
-                description("Provides functionality for managing application security and personnel data.").
-                icon("mainMenu:help").
-                detailIcon("mainMenu:help").
-                bgColor("#FFE680").
-                captionBgColor("#FFD42A").menu()
-                .addMenuItem("Asset Table Codes").description("Various master data for assets.")
-                    .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE))
-                    .centre(assetClassWebUiConfig.centre).done()
-                    .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE))
-                    .centre(assetTypeWebUiConfig.centre).done()
-                .done()
-                .addMenuItem("Service Status Table Codes").description("Various master data for servide statuses.")
-                    .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE))
-                    .centre(serviceStatusWebUiConfig.centre).done()
-                    .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE))
-                    .centre(conditionRatingWebUiConfig.centre).done()
-                .done()
-                .addMenuItem("Personnel").description("Personnel related data")
-                    .addMenuItem("Personnel").description("Personnel Centre").centre(personWebUiConfig.centre).done()
-                .done()
-                .addMenuItem("Users").description("Users related data")
-                    .addMenuItem("Users").description("User centre").centre(userWebUiConfig.centre).done()
-                    .addMenuItem("User Roles").description("User roles centre").centre(userRoleWebUiConfig.centre).done()
-                .done()
-            .done().done()
-        .setLayoutFor(Device.DESKTOP, null, "[[[]]]")
-        .setLayoutFor(Device.TABLET, null, "[[[]]]")
-        .setLayoutFor(Device.MOBILE, null, "[[[]]]")
-        .minCellWidth(100).minCellHeight(148).done();
-    }
+        addModule("Asset Acquisition").
+        description("Asset acquisition module").
+        icon("mainMenu:equipment").
+        detailIcon("mainMenu:equipment").
+        bgColor("#FFE680").
+        captionBgColor("#FFD42A").menu()
+            .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", Asset.ENTITY_TITLE))
+            .centre(assetWebUiConfig.centre).done()
+            .done().done().
+        addModule("Users / Personnel").
+            description("Provides functionality for managing application security and personnel data.").
+            icon("mainMenu:help").
+            detailIcon("anotherMainMenu:about").
+            bgColor("#FFE680").
+            captionBgColor("#FFD42A").menu()
+            .addMenuItem("Personnel").description("Personnel related data")
+                .addMenuItem("Personnel").description("Personnel Centre").centre(personWebUiConfig.centre).done()
+            .done()
+            .addMenuItem("Users").description("Users related data")
+                .addMenuItem("Users").description("User centre").centre(userWebUiConfig.centre).done()
+                .addMenuItem("User Roles").description("User roles centre").centre(userRoleWebUiConfig.centre).done()
+            .done().
+        done().done().
+        addModule("Table Codes").
+            description("Table Codes Description").
+            icon("mainMenu:tablecodes").
+            detailIcon("mainMenu:tablecodes").
+            bgColor("#FFE680").
+            captionBgColor("#FFD42A").menu()
+            .addMenuItem("Asset Table Codes").description("Various master data for assets.")
+                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE))
+                .centre(assetClassWebUiConfig.centre).done()
+                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE))
+                .centre(assetTypeWebUiConfig.centre).done()
+            .done().
+        done().done()
+    .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")
+    .setLayoutFor(Device.TABLET, null,  "[[[{\"rowspan\":2}], []], [[]]]")
+    .setLayoutFor(Device.MOBILE, null, "[[[]],[[]], [[]]]")
+    .minCellWidth(100).minCellHeight(148).done();
+}
+
+            
 
 }

@@ -13,6 +13,10 @@ import ua.com.fielden.platform.entity.AbstractEntity;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
 import sofia.service.tablecodes.ServiceStatus;
+import sofia.assets.Asset;
+import sofia.asset.tablecodes.ui_actions.OpenAssetClassMasterAction;
+import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
+import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
 import sofia.service.tablecodes.ConditionRating;
 
 /**
@@ -31,6 +35,10 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(AssetClass.class);
         add(AssetType.class);
         add(ServiceStatus.class);
+        add(Asset.class);
+        add(OpenAssetClassMasterAction.class);
+        add(AssetClassMaster_OpenMain_MenuItem.class);
+        add(AssetClassMaster_OpenAssetType_MenuItem.class);
         add(ConditionRating.class);
     }
 
