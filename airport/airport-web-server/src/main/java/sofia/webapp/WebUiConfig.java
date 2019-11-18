@@ -33,7 +33,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
     private final int port;
 
     public WebUiConfig(final String domainName, final int port, final Workflows workflow, final String path) {
-        super("Helsinki Airport Asset Management (development)", workflow, new String[] { "helsinki/" });
+        super("Sofia Airport Asset Management (development)", workflow, new String[] { "sofia/" });
         if (StringUtils.isEmpty(domainName) || StringUtils.isEmpty(path)) {
             throw new IllegalArgumentException("Both the domain name and application binding path should be specified.");
         }
@@ -137,11 +137,17 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 .centre(assetClassWebUiConfig.centre).done()
                 .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE))
                 .centre(assetTypeWebUiConfig.centre).done()
-            .done().
+            .done()
+            .addMenuItem("Asset Service Codes").description("Various master data for assets service.")
+            .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE))
+            .centre(serviceStatusWebUiConfig.centre).done()
+            .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE))
+            .centre(conditionRatingWebUiConfig.centre).done()
+        .done().
         done().done()
     .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")
     .setLayoutFor(Device.TABLET, null,  "[[[{\"rowspan\":2}], []], [[]]]")
-    .setLayoutFor(Device.MOBILE, null, "[[[]],[[]], [[]]]")
+    .setLayoutFor(Device.MOBILE, null, "[ [[]],[[]], [[]], [[]] ]")
     .minCellWidth(100).minCellHeight(148).done();
 }
 
