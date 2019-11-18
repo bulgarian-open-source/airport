@@ -3,6 +3,7 @@ package sofia.webapp;
 import org.apache.commons.lang.StringUtils;
 
 import sofia.config.personnel.PersonWebUiConfig;
+import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
@@ -10,6 +11,7 @@ import sofia.assets.Asset;
 import sofia.webapp.config.asset.tablecodes.AssetClassWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeWebUiConfig;
 import sofia.webapp.config.assets.AssetWebUiConfig;
+import sofia.webapp.config.service.tablecodes.ConditionRatingWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ServiceStatusWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
@@ -85,6 +87,9 @@ public class WebUiConfig extends AbstractWebUiConfig {
         //Asset instance
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
 
+        final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
+
+
 
         // Configure application web resources such as masters and centres
         configApp()
@@ -139,5 +144,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
     .setLayoutFor(Device.MOBILE, null, "[[[]],[[]], [[]]]")
     .minCellWidth(100).minCellHeight(148).done();
 }
+
+            
 
 }
