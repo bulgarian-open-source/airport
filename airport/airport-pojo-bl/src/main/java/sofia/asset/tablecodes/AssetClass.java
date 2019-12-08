@@ -46,7 +46,7 @@ public class AssetClass extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     @IsProperty
     @MapTo
-    @Title(value = "Name", desc = "Asset class name")
+    @Title(value = "name", desc = "Asset class name")
     @CompositeKeyMember(1)
     @BeforeChange({
         @Handler(NoSpacesValidator.class), 
