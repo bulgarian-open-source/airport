@@ -21,7 +21,7 @@ import ua.com.fielden.platform.utils.Pair;
 /**
  * This entity captures financial detail about the asset so it can be tracked and depreciated.
  *
- * @author mitryahina
+ * @author Sofia team
  *
  */
 @KeyType(Asset.class)
