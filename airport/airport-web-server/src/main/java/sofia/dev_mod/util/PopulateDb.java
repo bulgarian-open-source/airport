@@ -79,8 +79,8 @@ public class PopulateDb extends DomainDrivenDataPopulation {
     protected void populateDomain() {
         LOGGER.info("Creating and populating the development database...");
         
-        setupUser(User.system_users.SU, "helsinki");
-        setupPerson(User.system_users.SU, "helsinki");
+        setupUser(User.system_users.SU, "sofia");
+        setupPerson(User.system_users.SU, "sofia");
         
         final AssetClass as1 = save(new_(AssetClass.class).setName("AC1").setDesc("First description.").setActive(true));
         save(new_(AssetClass.class).setName("AC2").setDesc("First description."));
