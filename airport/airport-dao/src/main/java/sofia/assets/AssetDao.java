@@ -12,6 +12,7 @@ import ua.com.fielden.platform.entity.fetch.IFetchProvider;
 import ua.com.fielden.platform.dao.annotations.SessionRequired;
 import ua.com.fielden.platform.dao.CommonEntityDao;
 import ua.com.fielden.platform.entity.query.IFilter;
+import ua.com.fielden.platform.error.Result;
 import ua.com.fielden.platform.keygen.IKeyNumber;
 import ua.com.fielden.platform.keygen.KeyNumber;
 import ua.com.fielden.platform.entity.annotation.EntityType;
@@ -26,7 +27,10 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
 	public static final String ERR_FAILED_SAVE = "Deliberate save exception.";
 
     public static final String DEFAULT_ASSET_NUMBER = "NEXT NUMBER WILL BE GENERATED UPON SAVE.";
+
     private boolean throwExceptionForTestingPurposes = false;
+    public static final String ERR_FAILED_SAVE = "Deliberate save exception.";
+
 
     @Inject
     public AssetDao(final IFilter filter) {
@@ -74,6 +78,12 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
             // and re-throw the exception
             throw ex;
         }
+    }
+    
+    @SessionRequired
+    public Asset saveWithError(final Asset asset) {
+        save(asset);
+        throw Result.failure(ERR_FAILED_SAVE);
     }
 
     @Override

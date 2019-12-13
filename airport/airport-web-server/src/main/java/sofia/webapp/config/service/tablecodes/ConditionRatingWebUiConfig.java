@@ -97,7 +97,7 @@ public class ConditionRatingWebUiConfig {
         final String layout = LayoutComposer.mkGridForMasterFitWidth(1, 2);
 
         final IMaster<ConditionRating> masterConfig = new SimpleMasterBuilder<ConditionRating>().forEntity(ConditionRating.class)
-                .addProp("name").asSinglelineText().also()
+                .addProp("rating").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)

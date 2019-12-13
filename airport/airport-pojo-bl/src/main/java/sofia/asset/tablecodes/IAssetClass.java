@@ -13,7 +13,7 @@ import ua.com.fielden.platform.dao.IEntityDao;
 public interface IAssetClass extends IEntityDao<AssetClass> {
 
     static final IFetchProvider<AssetClass> FETCH_PROVIDER = EntityUtils.fetch(AssetClass.class).with(
-        "key", "desc");
+        "name", "desc");
 //        "Please specify the properties, which are required for the UI");
 
 }

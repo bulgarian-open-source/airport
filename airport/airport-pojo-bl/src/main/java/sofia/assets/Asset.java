@@ -1,5 +1,6 @@
 package sofia.assets;
 
+import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
@@ -49,7 +50,6 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     private String number;
     
     @IsProperty
-    @MapTo
     @Required
     @Title(value = "assetType", desc = "An asset type for this asset.")
     private AssetType assetType;
@@ -75,6 +75,13 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     public String getNumber() {
         return number;
+    }
+    
+    @Override
+    @Observable
+    public Asset setDesc(String desc) {
+        super.setDesc(desc);
+        return this;
     }
 
     

@@ -38,18 +38,18 @@ public class ConditionRating extends AbstractPersistentEntity<DynamicEntityKey> 
     
     @IsProperty
     @MapTo
-    @Title(value = "Name", desc = "Desc")
+    @Title(value = "rating", desc = "Desc")
     @CompositeKeyMember(1)
-    private String name;
+    private String rating;
     
     @Observable
-    public ConditionRating setName(final String name) {
-        this.name = name;
+    public ConditionRating setRating(String rating) {
+        this.rating = rating;
         return this;
     }
 
-    public String getName() {
-        return name;
+    public String getRating() {
+        return rating;
     }
     
     @Override

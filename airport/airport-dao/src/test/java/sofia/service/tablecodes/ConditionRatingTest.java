@@ -15,15 +15,15 @@ public class ConditionRatingTest extends AbstractDaoTestCase{
     
     @Test
     public void persistent_predicates_on_abstract_entities() {
-        final ConditionRating cr1 = co(ConditionRating.class).findByKey("CR1");
+        final ConditionRating cr1 = co(ConditionRating.class).findByKey("10");
         assertNotNull(cr1);
-        assertEquals("CR1", cr1.getKey().toString());
+        assertEquals("10", cr1.getKey().toString());
         
         assertTrue(cr1.isPersistent());
         assertTrue(cr1.isPersisted());
                 
         final IConditionRating coConditionRating = co(ConditionRating.class);
-        final ConditionRating cr3 = (ConditionRating) coConditionRating.new_().setName("CR3");
+        final ConditionRating cr3 = (ConditionRating) coConditionRating.new_().setRating("7");
         cr3.setDesc("some value");
 
         assertTrue(cr3.isPersistent());
@@ -60,8 +60,8 @@ public class ConditionRatingTest extends AbstractDaoTestCase{
         }
 
         // AssetClass population for the test case
-        save(new_composite(ConditionRating.class, "CR1").setDesc("The first condition rating"));
-        save(new_composite(ConditionRating.class, "CR2").setDesc("The second condition rating"));
+        save(new_composite(ConditionRating.class, "10").setDesc("The first condition rating"));
+        save(new_composite(ConditionRating.class, "9").setDesc("The second condition rating"));
     }
 
 }
