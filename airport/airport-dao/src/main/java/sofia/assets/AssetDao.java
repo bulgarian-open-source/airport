@@ -29,7 +29,6 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
     public static final String DEFAULT_ASSET_NUMBER = "NEXT NUMBER WILL BE GENERATED UPON SAVE.";
 
     private boolean throwExceptionForTestingPurposes = false;
-    public static final String ERR_FAILED_SAVE = "Deliberate save exception.";
 
 
     @Inject
