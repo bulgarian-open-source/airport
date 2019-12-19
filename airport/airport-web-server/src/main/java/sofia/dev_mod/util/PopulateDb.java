@@ -14,14 +14,18 @@ import org.apache.log4j.xml.DOMConfigurator;
 
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
+import sofia.assets.Asset;
+import sofia.assets.AssetFinDet;
+import sofia.assets.IAssetFinDet;
 import sofia.config.ApplicationDomain;
 import sofia.personnel.Person;
-
+import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.devdb_support.DomainDrivenDataPopulation;
 import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.persistence.HibernateUtil;
 import ua.com.fielden.platform.security.user.User;
 import ua.com.fielden.platform.test.IDomainDrivenTestCaseConfiguration;
+import ua.com.fielden.platform.types.Money;
 import ua.com.fielden.platform.utils.DbUtils;
 
 /**
@@ -85,6 +89,20 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         final AssetClass as1 = save(new_(AssetClass.class).setName("AC1").setDesc("First description.").setActive(true));
         save(new_(AssetClass.class).setName("AC2").setDesc("First description."));
         save(new_(AssetType.class).setName("AT1").setDesc("First description.").setAssetClass(as1));
+        
+        final IEntityDao<AssetType> co1$ = co$(AssetType.class);
+        final AssetType at1 = co1$.findByKey("AT1");
+        
+        final Asset asset1 = save(new_(Asset.class).setDesc("demo asset 1").setAssetType(at1));
+        final Asset asset2 = save(new_(Asset.class).setDesc("demo asset 2").setAssetType(at1));
+        final Asset asset3 = save(new_(Asset.class).setDesc("demo asset 3").setAssetType(at1));
+        
+        final AssetFinDet finDet1 = co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
+        save(finDet1.setInitCost(Money.of("120.00")).setAcquireDate(date("2019-12-07 00:00:00")));
+        final AssetFinDet finDet2 = co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
+        save(finDet2.setInitCost(Money.of("100.00")).setAcquireDate(date("2019-11-07 00:00:00")));
+        final AssetFinDet finDet3 = co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
+        save(finDet3.setInitCost(Money.of("10.00")).setAcquireDate(date("2018-11-07 00:00:00")));
 
         LOGGER.info("Completed database creation and population.");
     }
