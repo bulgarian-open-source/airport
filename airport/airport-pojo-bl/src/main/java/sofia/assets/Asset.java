@@ -53,6 +53,23 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Required
     @Title(value = "assetType", desc = "An asset type for this asset.")
     private AssetType assetType;
+    
+    @IsProperty
+    @Title(value = "Fin Det", desc = "Financial details for this asset")
+    private AssetFinDet finDet;
+
+    @Observable
+    public Asset setFinDet(final AssetFinDet finDet) {
+        this.finDet = finDet;
+        return this;
+    }
+
+    public AssetFinDet getFinDet() {
+        return finDet;
+    }
+
+    
+
 
     @Observable
     public Asset setAssetType(final AssetType assetType) {
