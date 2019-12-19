@@ -29,6 +29,14 @@ import ua.com.fielden.platform.entity.meta.MetaProperty;
 import ua.com.fielden.platform.error.Result;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 
+/**
+ * This is a test case for {@link Asset}
+ * 
+ * @author Sofia-team
+ *
+ */
+
+
 public class AssetTest extends AbstractDaoTestCase {
     
     @Test
