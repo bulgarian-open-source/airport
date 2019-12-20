@@ -15,6 +15,9 @@ import org.apache.log4j.xml.DOMConfigurator;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
 import sofia.config.ApplicationDomain;
+import sofia.organizational.BusinessUnit;
+import sofia.organizational.Organization;
+import sofia.organizational.Role;
 import sofia.personnel.Person;
 
 import ua.com.fielden.platform.devdb_support.DomainDrivenDataPopulation;
@@ -84,7 +87,12 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         
         final AssetClass as1 = save(new_(AssetClass.class).setName("AC1").setDesc("First description.").setActive(true));
         save(new_(AssetClass.class).setName("AC2").setDesc("First description."));
-        save(new_(AssetType.class).setName("AT1").setDesc("First description.").setAssetClass(as1));
+        save(new_(AssetType.class).setName("AT1").setDesc("First description.").setAssetClass(as1).setActive(true   ));
+        
+
+        save(new_(Role.class).setName("R1").setDesc("First role"));
+        save(new_(BusinessUnit.class).setName("BU1").setDesc("First business unit"));
+        save(new_(Organization.class).setName("ORG1").setDesc("First organization"));
 
         LOGGER.info("Completed database creation and population.");
     }

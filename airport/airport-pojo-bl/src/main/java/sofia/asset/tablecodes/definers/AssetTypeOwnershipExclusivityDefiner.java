@@ -1,47 +1,34 @@
 package sofia.asset.tablecodes.definers;
 
+import java.util.Set;
+import java.util.stream.Stream;
+
 import sofia.asset.tablecodes.AssetTypeOwnership;
 import ua.com.fielden.platform.entity.meta.IAfterChangeEventHandler;
 import ua.com.fielden.platform.entity.meta.MetaProperty;
+import ua.com.fielden.platform.utils.CollectionUtil;
 
 public class AssetTypeOwnershipExclusivityDefiner implements IAfterChangeEventHandler<Object> {
+    
+    private final static Set<String> ownershipPropNames = CollectionUtil.setOf("role", "bu", "org");
 
     @Override
     public void handle(final MetaProperty<Object> property, final Object value) {
+        
        final AssetTypeOwnership ownership = property.getEntity();
        final boolean allEmpty = ownership.getRole() == null && ownership.getBu() == null && ownership.getOrg() == null;
        
-       if (ownership.getRole() == null) {
-           ownership.getProperty("role").setRequired(allEmpty);
-           }
-           if (ownership.getBu() == null) {
-               ownership.getProperty("bu").setRequired(allEmpty);
-           }
-           if (ownership.getOrg() == null) {
-           ownership.getProperty("org").setRequired(allEmpty);
-           }
+       ownershipPropNames.stream()
+               .map(name -> ownership.getProperty(name))
+               .filter(p -> p.getValue() == null)
+               .forEach(p -> p.setRequired(allEmpty));
            
        if (value != null) {
-           if ("role".equals(property.getName())) {
-               ownership.getProperty("bu").setRequired(false);
-               ownership.setBu(null);
-               ownership.getProperty("org").setRequired(false);
-               ownership.setOrg(null);
-               ownership.getProperty("role").setRequired(true);
-               
-           } else if ("bu".equals(property.getName())) {
-                   ownership.getProperty("role").setRequired(false);
-                   ownership.setRole(null);
-                   ownership.getProperty("org").setRequired(false);
-                   ownership.setOrg(null);
-                   ownership.getProperty("bu").setRequired(true);
-           } else if ("org".equals(property.getName())){
-                   ownership.getProperty("role").setRequired(false);
-                   ownership.setRole(null);
-                   ownership.getProperty("bu").setRequired(false);
-                   ownership.setBu(null);
-                   ownership.getProperty("org").setRequired(true);
-           }
+           ownershipPropNames.stream()
+                    .filter(name -> !name.equalsIgnoreCase(property.getName()))
+                    .map(name -> ownership.getProperty(name))
+                    .forEach(p -> {p.setRequired(false);p.setValue(null);});
+           property.setRequired(true);
        }
    }
 }

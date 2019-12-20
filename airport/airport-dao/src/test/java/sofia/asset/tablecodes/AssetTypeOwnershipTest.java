@@ -220,8 +220,8 @@ public class AssetTypeOwnershipTest extends AbstractDaoTestCase {
 
         // population for the test case
         
-        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("First Asset Class"));
-        save(new_(AssetType.class).setName("AT1").setAssetClass(ac1).setDesc("First Asset Type"));
+        final AssetClass ac1 = save(new_(AssetClass.class).setName("AC1").setDesc("First Asset Class").setActive(true));
+        save(new_(AssetType.class).setName("AT1").setAssetClass(ac1).setDesc("First Asset Type").setActive(true));
         
         
         save(new_(Role.class).setName("R1").setDesc("First role"));

@@ -7,9 +7,11 @@ import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
+import sofia.asset.tablecodes.AssetTypeOwnership;
 import sofia.assets.Asset;
 import sofia.assets.AssetFinDet;
 import sofia.webapp.config.asset.tablecodes.AssetClassWebUiConfig;
+import sofia.webapp.config.asset.tablecodes.AssetTypeOwnershipWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeWebUiConfig;
 import sofia.webapp.config.assets.AssetFinDetWebUiConfig;
 import sofia.webapp.config.assets.AssetWebUiConfig;
@@ -83,14 +85,16 @@ public class WebUiConfig extends AbstractWebUiConfig {
         // Asset table codes
         final AssetClassWebUiConfig assetClassWebUiConfig = AssetClassWebUiConfig.register(injector(), builder);
         final AssetTypeWebUiConfig assetTypeWebUiConfig = AssetTypeWebUiConfig.register(injector(), builder);
+        final AssetTypeOwnershipWebUiConfig assetTypeOwnershipWebUiConfig = AssetTypeOwnershipWebUiConfig.register(injector(), builder);
+        
         // Service Status table codes
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder);
-        
+        final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
+
         //Asset instance
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
         final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
 
-        final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
 
 
 
@@ -136,10 +140,9 @@ public class WebUiConfig extends AbstractWebUiConfig {
             bgColor("#FFE680").
             captionBgColor("#FFD42A").menu()
             .addMenuItem("Asset Table Codes").description("Various master data for assets.")
-                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE))
-                .centre(assetClassWebUiConfig.centre).done()
-                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE))
-                .centre(assetTypeWebUiConfig.centre).done()
+                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE)).centre(assetClassWebUiConfig.centre).done()
+                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).done()
+                .addMenuItem(AssetTypeOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOwnership.ENTITY_TITLE)).centre(assetTypeOwnershipWebUiConfig.centre).done()
             .done()
             .addMenuItem("Asset Service Codes").description("Various master data for assets service.")
             .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE))
