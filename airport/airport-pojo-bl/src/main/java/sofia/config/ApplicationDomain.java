@@ -19,6 +19,7 @@ import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenMain_Menu
 import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
 import sofia.service.tablecodes.ConditionRating;
 import sofia.assets.AssetFinDet;
+import sofia.projects.Project;
 
 /**
  * A class to register domain entities.
@@ -27,34 +28,35 @@ import sofia.assets.AssetFinDet;
  * 
  */
 public class ApplicationDomain implements IApplicationDomainProvider {
-	private static final Set<Class<? extends AbstractEntity<?>>> entityTypes = new LinkedHashSet<>();
-	private static final Set<Class<? extends AbstractEntity<?>>> domainTypes = new LinkedHashSet<>();
+    private static final Set<Class<? extends AbstractEntity<?>>> entityTypes = new LinkedHashSet<>();
+    private static final Set<Class<? extends AbstractEntity<?>>> domainTypes = new LinkedHashSet<>();
 
-	static {
-		entityTypes.addAll(PlatformDomainTypes.types);
-		add(Person.class);
-		add(AssetClass.class);
-		add(AssetType.class);
-		add(ServiceStatus.class);
-		add(Asset.class);
-		add(OpenAssetClassMasterAction.class);
-		add(AssetClassMaster_OpenMain_MenuItem.class);
-		add(AssetClassMaster_OpenAssetType_MenuItem.class);
-		add(ConditionRating.class);
-		add(AssetFinDet.class);
-	}
+    static {
+        entityTypes.addAll(PlatformDomainTypes.types);
+        add(Person.class);
+        add(AssetClass.class);
+        add(AssetType.class);
+        add(ServiceStatus.class);
+        add(Asset.class);
+        add(OpenAssetClassMasterAction.class);
+        add(AssetClassMaster_OpenMain_MenuItem.class);
+        add(AssetClassMaster_OpenAssetType_MenuItem.class);
+        add(ConditionRating.class);
+        add(AssetFinDet.class);
+        add(Project.class);
+    }
 
-	private static void add(final Class<? extends AbstractEntity<?>> domainType) {
-		entityTypes.add(domainType);
-		domainTypes.add(domainType);
-	}
+    private static void add(final Class<? extends AbstractEntity<?>> domainType) {
+        entityTypes.add(domainType);
+        domainTypes.add(domainType);
+    }
 
-	@Override
-	public List<Class<? extends AbstractEntity<?>>> entityTypes() {
-		return Collections.unmodifiableList(entityTypes.stream().collect(Collectors.toList()));
-	}
+    @Override
+    public List<Class<? extends AbstractEntity<?>>> entityTypes() {
+        return Collections.unmodifiableList(entityTypes.stream().collect(Collectors.toList()));
+    }
 
-	public List<Class<? extends AbstractEntity<?>>> domainTypes() {
-		return Collections.unmodifiableList(domainTypes.stream().collect(Collectors.toList()));
-	}
+    public List<Class<? extends AbstractEntity<?>>> domainTypes() {
+        return Collections.unmodifiableList(domainTypes.stream().collect(Collectors.toList()));
+    }
 }
