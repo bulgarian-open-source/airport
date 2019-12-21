@@ -3,6 +3,7 @@ package sofia.webapp;
 import org.apache.commons.lang.StringUtils;
 
 import sofia.config.personnel.PersonWebUiConfig;
+import sofia.projects.Project;
 import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
@@ -13,6 +14,7 @@ import sofia.webapp.config.asset.tablecodes.AssetClassWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeWebUiConfig;
 import sofia.webapp.config.assets.AssetFinDetWebUiConfig;
 import sofia.webapp.config.assets.AssetWebUiConfig;
+import sofia.webapp.config.projects.ProjectWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ConditionRatingWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ServiceStatusWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
@@ -83,14 +85,19 @@ public class WebUiConfig extends AbstractWebUiConfig {
         // Asset table codes
         final AssetClassWebUiConfig assetClassWebUiConfig = AssetClassWebUiConfig.register(injector(), builder);
         final AssetTypeWebUiConfig assetTypeWebUiConfig = AssetTypeWebUiConfig.register(injector(), builder);
+        
         // Service Status table codes
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder);
-        
-        //Asset instance
+        final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
+
+        // Asset related UI
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
         final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
+        
+        
+        // Project related UI
+        final ProjectWebUiConfig projectWebUiConfig = ProjectWebUiConfig.register(injector(), builder);
 
-        final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
 
 
 
@@ -114,6 +121,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
         captionBgColor("#FFD42A").menu()
             .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
             .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", AssetFinDet.ENTITY_TITLE)).centre(assetFinDetWebUiConfig.centre).done()
+            .addMenuItem(Project.ENTITY_TITLE).description(String.format("%s Centre", Project.ENTITY_TITLE)).centre(projectWebUiConfig.centre).done()
             .done().done().
         addModule("Users / Personnel").
             description("Provides functionality for managing application security and personnel data.").
