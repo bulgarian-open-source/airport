@@ -34,7 +34,6 @@ import org.junit.Test;
 
 import sofia.test_config.AbstractDaoTestCase;
 import sofia.test_config.UniversalConstantsForTesting;
-import sofia.validators.NoSpacesValidator;
 import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.dao.QueryExecutionModel;
 import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
@@ -51,8 +50,34 @@ public class ProjectTest extends AbstractDaoTestCase {
     @Test
     public void project_start_and_finish_do_not_permit_inverted_periods() {
         final Project project = co(Project.class).new_().setName("Project 1").setDesc("Project 1 description");
+        project.setStartDate(date("2019-12-08 00:00:00")).setFinishDate(date("2019-11-08 00:00:00"));
         
-       
+        assertFalse(project.isValid().isSuccessful());
+        assertTrue(project.getProperty("startDate").isValid());
+        assertFalse(project.getProperty("finishDate").isValid());
+        assertNull(project.getFinishDate());
+        
+        project.setStartDate(date("2019-10-08 00:00:00"));
+        assertTrue(project.getProperty("startDate").isValid());
+        assertTrue(project.getProperty("finishDate").isValid());
+        assertEquals(date("2019-10-08 00:00:00"), project.getStartDate());
+        assertEquals(date("2019-11-08 00:00:00"), project.getFinishDate());
+        assertTrue(project.isValid().isSuccessful());
+        
+        final Project savedProject = save(project);
+        assertTrue(co(Project.class).entityExists(savedProject));
+    }
+    
+    @Test
+    public void start_date_is_required_for_the_project() {
+        final Project project = co(Project.class).new_().setName("Project 1").setDesc("Project 1 description");
+        final Result validationResult = project.isValid();
+        assertFalse(validationResult.isSuccessful());
+        assertEquals("Required property [Start Date] is not specified for entity [Project].", validationResult.getMessage());
+        
+        project.setStartDate(date("2019-10-08 00:00:00"));
+        assertTrue(project.isValid().isSuccessful());
+        
     }
     
     
