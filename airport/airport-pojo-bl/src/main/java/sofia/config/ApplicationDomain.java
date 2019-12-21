@@ -23,6 +23,7 @@ import sofia.organizational.Role;
 import sofia.organizational.BusinessUnit;
 import sofia.organizational.Organization;
 import sofia.asset.tablecodes.AssetTypeOwnership;
+import sofia.asset.tablecodes.AssetTypeOperatorship;
 
 /**
  * A class to register domain entities.
@@ -50,6 +51,7 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(BusinessUnit.class);
         add(Organization.class);
         add(AssetTypeOwnership.class);
+        add(AssetTypeOperatorship.class);
     }
 
     private static void add(final Class<? extends AbstractEntity<?>> domainType) {
