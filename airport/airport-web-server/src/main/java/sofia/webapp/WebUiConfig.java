@@ -7,10 +7,12 @@ import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
+import sofia.asset.tablecodes.AssetTypeOperatorship;
 import sofia.asset.tablecodes.AssetTypeOwnership;
 import sofia.assets.Asset;
 import sofia.assets.AssetFinDet;
 import sofia.webapp.config.asset.tablecodes.AssetClassWebUiConfig;
+import sofia.webapp.config.asset.tablecodes.AssetTypeOperatorshipWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeOwnershipWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeWebUiConfig;
 import sofia.webapp.config.assets.AssetFinDetWebUiConfig;
@@ -86,6 +88,8 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final AssetClassWebUiConfig assetClassWebUiConfig = AssetClassWebUiConfig.register(injector(), builder);
         final AssetTypeWebUiConfig assetTypeWebUiConfig = AssetTypeWebUiConfig.register(injector(), builder);
         final AssetTypeOwnershipWebUiConfig assetTypeOwnershipWebUiConfig = AssetTypeOwnershipWebUiConfig.register(injector(), builder);
+        final AssetTypeOperatorshipWebUiConfig assetTypeOperatorshipWebUiConfig = AssetTypeOperatorshipWebUiConfig.register(injector(), builder);
+
         
         // Service Status table codes
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder);
@@ -143,6 +147,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
                 .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE)).centre(assetClassWebUiConfig.centre).done()
                 .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).done()
                 .addMenuItem(AssetTypeOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOwnership.ENTITY_TITLE)).centre(assetTypeOwnershipWebUiConfig.centre).done()
+                .addMenuItem(AssetTypeOperatorship.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOperatorship.ENTITY_TITLE)).centre(assetTypeOperatorshipWebUiConfig.centre).done()
             .done()
             .addMenuItem("Asset Service Codes").description("Various master data for assets service.")
             .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE))
