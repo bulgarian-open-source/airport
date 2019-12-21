@@ -110,6 +110,8 @@ public class AssetTypeOwnershipTest extends AbstractDaoTestCase {
         final AssetTypeOwnership ownership =  co(AssetTypeOwnership.class).new_()
                 .setAssetType(at1)
                 .setStartDate(date("2019-11-01 00:00:00"));
+        
+        //System.out.println(ownership.getProperty("role"))
                 
         assertFalse(ownership.isValid().isSuccessful());
         assertNull(ownership.getRole());
