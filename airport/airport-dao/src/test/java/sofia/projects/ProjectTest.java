@@ -32,6 +32,13 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import sofia.asset.tablecodes.AssetClass;
+import sofia.asset.tablecodes.AssetType;
+import sofia.assets.Asset;
+import sofia.assets.AssetDao;
+import sofia.assets.AssetFinDet;
+import sofia.assets.IAssetFinDet;
+import sofia.projects.validators.ProjectStartAndFinishDatesValidator;
 import sofia.test_config.AbstractDaoTestCase;
 import sofia.test_config.UniversalConstantsForTesting;
 import ua.com.fielden.platform.dao.IEntityDao;
@@ -80,6 +87,49 @@ public class ProjectTest extends AbstractDaoTestCase {
         
     }
     
+    @Test
+    public void start_date_cannot_be_after_acquired_date_for_associated_assets() {
+        final Project project = save(new_(Project.class).setName("PROJECT 1").setStartDate(date("2019-10-01 00:00:00")).setDesc("Project 1 description"));
+        final IEntityDao<AssetType> co1$ = co$(AssetType.class);
+        final AssetType at1 = co1$.findByKey("AT1");
+        
+        final AssetDao co$ = co$(Asset.class);
+        final Asset asset1 = save(co$.new_().setDesc("first desc").setAssetType(at1));
+        final Asset asset2 = save(co$.new_().setDesc("second desc").setAssetType(at1));
+        final Asset asset3 = save(co$.new_().setDesc("third desc").setAssetType(at1));
+        
+        save(co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-10-02 00:00:00")).setProject(project));
+        save(co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-11-02 00:00:00")).setProject(project));
+        save(co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2020-01-02 00:00:00")).setProject(project));
+
+        project.setStartDate(date("2019-11-01 00:00:00"));
+        assertFalse(project.isValid().isSuccessful());
+        assertEquals(ProjectStartAndFinishDatesValidator.ERR_OUTSIDE_NEW_PERIOD_DUE_TO_START_DATE, project.isValid().getMessage());
+    }
+    
+    @Test
+    public void finish_date_cannot_be_before_acquire_date_for_associated_assets() {
+        final Project project = save(new_(Project.class).setName("PROJECT 1")
+        		.setStartDate(date("2019-10-01 00:00:00"))
+        		.setFinishDate(date("2020-10-01 00:00:00"))
+        		.setDesc("Project 1 description"));
+        final IEntityDao<AssetType> co1$ = co$(AssetType.class);
+        final AssetType at1 = co1$.findByKey("AT1");
+        
+        final AssetDao co$ = co$(Asset.class);
+        final Asset asset1 = save(co$.new_().setDesc("first desc").setAssetType(at1));
+        final Asset asset2 = save(co$.new_().setDesc("second desc").setAssetType(at1));
+        final Asset asset3 = save(co$.new_().setDesc("third desc").setAssetType(at1));
+        
+        save(co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-10-02 00:00:00")).setProject(project));
+        save(co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-11-02 00:00:00")).setProject(project));
+        save(co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2020-01-02 00:00:00")).setProject(project));
+
+        project.setFinishDate(date("2020-01-01 00:00:00"));
+        assertFalse(project.isValid().isSuccessful());
+        assertEquals(ProjectStartAndFinishDatesValidator.ERR_OUTSIDE_NEW_PERIOD_DUE_TO_FINISH_DATE, project.isValid().getMessage());
+    }
+    
     
     
     @Override
@@ -89,7 +139,7 @@ public class ProjectTest extends AbstractDaoTestCase {
 
     @Override
     public boolean useSavedDataPopulationScript() {
-        return true;
+        return false;
     }
 
     @Override
@@ -107,6 +157,13 @@ public class ProjectTest extends AbstractDaoTestCase {
         if (useSavedDataPopulationScript()) {
             return;
         }
+        
+        final AssetClass AC1 = new_composite(AssetClass.class, "AC1").setDesc("The first asset class");
+        save(new_composite(AssetClass.class, "AC1").setDesc("The first asset class"));
+        final IEntityDao<AssetClass> co$ = co$(AssetClass.class);
+        final AssetClass ac1 = co$.findByKey("AC1");
+        save(new_composite(AssetClass.class, "AC2").setDesc("The first asset class"));
+        save(new_composite(AssetType.class, "AT1").setDesc("Some desc").setAssetClass(ac1));
 
     }
 
