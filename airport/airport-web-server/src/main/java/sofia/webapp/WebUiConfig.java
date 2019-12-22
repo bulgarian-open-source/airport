@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 import sofia.config.personnel.PersonWebUiConfig;
 import sofia.projects.Project;
+import sofia.service.tablecodes.AssetServiceStatus;
 import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
@@ -15,6 +16,7 @@ import sofia.webapp.config.asset.tablecodes.AssetTypeWebUiConfig;
 import sofia.webapp.config.assets.AssetFinDetWebUiConfig;
 import sofia.webapp.config.assets.AssetWebUiConfig;
 import sofia.webapp.config.projects.ProjectWebUiConfig;
+import sofia.webapp.config.service.tablecodes.AssetServiceStatusWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ConditionRatingWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ServiceStatusWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
@@ -89,6 +91,9 @@ public class WebUiConfig extends AbstractWebUiConfig {
         // Service Status table codes
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder);
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
+        final AssetServiceStatusWebUiConfig assetServiceStatusWebUiConfig = AssetServiceStatusWebUiConfig.register(injector(), builder);
+
+        
 
         // Asset related UI
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
@@ -144,16 +149,13 @@ public class WebUiConfig extends AbstractWebUiConfig {
             bgColor("#FFE680").
             captionBgColor("#FFD42A").menu()
             .addMenuItem("Asset Table Codes").description("Various master data for assets.")
-                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE))
-                .centre(assetClassWebUiConfig.centre).done()
-                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE))
-                .centre(assetTypeWebUiConfig.centre).done()
+                .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE)).centre(assetClassWebUiConfig.centre).done()
+                .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).done()
+                .addMenuItem(AssetServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", AssetServiceStatus.ENTITY_TITLE)).centre(assetServiceStatusWebUiConfig.centre).done()
             .done()
             .addMenuItem("Asset Service Codes").description("Various master data for assets service.")
-            .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE))
-            .centre(serviceStatusWebUiConfig.centre).done()
-            .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE))
-            .centre(conditionRatingWebUiConfig.centre).done()
+            .addMenuItem(ServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", ServiceStatus.ENTITY_TITLE)).centre(serviceStatusWebUiConfig.centre).done()
+            .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
         .done().
         done().done()
     .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")

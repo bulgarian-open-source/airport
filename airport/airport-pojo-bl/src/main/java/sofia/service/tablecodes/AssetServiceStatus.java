@@ -51,7 +51,7 @@ public class AssetServiceStatus extends AbstractPersistentEntity<DynamicEntityKe
     @IsProperty
     @MapTo
     @Required
-    @Title(value = "Start Date", desc = "The start date of the ownership")
+    @Title(value = "Service Status", desc = "Service status of an asset")
     private ServiceStatus serviceStatus;
     
     
