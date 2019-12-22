@@ -19,6 +19,7 @@ import sofia.assets.AssetFinDet;
 import sofia.assets.IAssetFinDet;
 import sofia.config.ApplicationDomain;
 import sofia.personnel.Person;
+import sofia.projects.Project;
 import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.devdb_support.DomainDrivenDataPopulation;
 import ua.com.fielden.platform.entity.AbstractEntity;
@@ -100,10 +101,12 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         final AssetFinDet finDet1 = co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
         save(finDet1.setInitCost(Money.of("120.00")).setAcquireDate(date("2019-12-07 00:00:00")));
         final AssetFinDet finDet2 = co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
-        save(finDet2.setInitCost(Money.of("100.00")).setAcquireDate(date("2019-11-07 00:00:00")));
+        save(finDet2.setInitCost(Money.of("100.00")).setAcquireDate(date("2019-11-01 00:00:00")));
         final AssetFinDet finDet3 = co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
-        save(finDet3.setInitCost(Money.of("10.00")).setAcquireDate(date("2018-11-07 00:00:00")));
-
+        save(finDet3.setInitCost(Money.of("10.00")));
+        
+        save(new_(Project.class).setName("PROJECT 1").setStartDate(date("2019-12-08 00:00:00")).setDesc("Project 1 description"));
+        save(new_(Project.class).setName("PROJECT 2").setStartDate(date("2020-01-02 00:00:00")).setDesc("Project 2 description"));
         LOGGER.info("Completed database creation and population.");
     }
 
