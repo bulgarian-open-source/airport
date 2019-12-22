@@ -34,7 +34,6 @@ import ua.com.fielden.platform.utils.Pair;
 @DescTitle("Description")
 @DisplayDescription
 @DescRequired
-// TODO: May need this later if some entities need to be automatically cascade-deactivated when this entity is deactivated
 // @DeactivatableDependencies({ Dependency1.class, Dependency2.class, Dependency3.class })
 public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
 
@@ -53,10 +52,6 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Required
     @Title(value = "assetType", desc = "An asset type for this asset.")
     private AssetType assetType;
-    
-    @IsProperty
-    @Title(value = "regulatory", desc = "A flag for Assets that are legally regulated.")
-    private boolean regulatory;
     
     @IsProperty
     @Title(value = "Fin Det", desc = "Financial details for this asset")
@@ -85,19 +80,9 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public AssetType getAssetType() {
         return assetType;
     }
-    
-    @Observable
-    public Asset setRegulatory(final boolean regulatory) {
-        this.regulatory= regulatory;
-        return this;
-    }
-    
-    @Observable
-    public boolean getRegulatory() {
-        return regulatory;
-    }
 
    
+
     @Observable
     public Asset setNumber(final String number) {
         this.number = number;
