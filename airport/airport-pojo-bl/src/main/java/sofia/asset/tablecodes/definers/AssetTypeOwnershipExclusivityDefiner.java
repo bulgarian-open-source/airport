@@ -1,3 +1,4 @@
+
 package sofia.asset.tablecodes.definers;
 
 import java.util.Set;
@@ -29,5 +30,4 @@ public class AssetTypeOwnershipExclusivityDefiner implements IAfterChangeEventHa
                     .forEach(p -> {p.setRequired(false);p.setValue(null);});
            property.setRequired(true);
        }
-   }
 }

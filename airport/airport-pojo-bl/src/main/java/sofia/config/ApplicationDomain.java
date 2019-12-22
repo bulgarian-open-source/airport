@@ -53,6 +53,7 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(Organization.class);
         add(AssetTypeOwnership.class);
         add(AssetTypeManagement.class);
+        add(AssetTypeOperatorship.class);
 
     }
 
