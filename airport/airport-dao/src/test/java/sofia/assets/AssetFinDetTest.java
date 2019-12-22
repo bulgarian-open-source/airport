@@ -223,7 +223,58 @@ public class AssetFinDetTest extends AbstractDaoTestCase {
         assertEquals(date("2019-12-10 00:00:00"), finDet.getAcquireDate());
         assertEquals(FinDetAcquireDateWithinProjectPeriod.ERR_OUTSIDE_PROJECT_PERIOD, finDet.isValid().getMessage());
          }
+    
+    @Test
+    public void acquire_date_is_defaulted_to_project_start_date() {
+    	final IEntityDao<AssetType> co1$ = co$(AssetType.class);
+        final AssetType at1 = co1$.findByKey("AT1");
+        final IAsset co2$ = co$(Asset.class);
+         
+        final Asset asset = save(co2$.new_().setAssetType(at1).setDesc("AS"));
+           
+        final AssetFinDet finDet = co$(AssetFinDet.class).findById(asset.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
+        assertNull(finDet.getAcquireDate());
+        assertNull(finDet.getProject());
+    	
+        final Project project = save(new_(Project.class).setName("test proj").setStartDate(date("2019-01-01 00:00:00")).setDesc("project desc"));
+        finDet.setProject(project);
+        assertEquals(finDet.getAcquireDate(), finDet.getProject().getStartDate());
+    }
      
+    @Test
+    public void acquire_date_is_not_changed_if_nonempty() {
+    	final IEntityDao<AssetType> co1$ = co$(AssetType.class);
+        final AssetType at1 = co1$.findByKey("AT1");
+        final IAsset co2$ = co$(Asset.class);
+         
+        final Asset asset = save(co2$.new_().setAssetType(at1).setDesc("AS"));
+           
+        final AssetFinDet finDet = co$(AssetFinDet.class).findById(asset.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2018-10-10 00:00:00"));
+        
+        assertNull(finDet.getProject());
+        assertNotNull(finDet.getAcquireDate());
+    	
+        final Project project = save(new_(Project.class).setName("test proj").setStartDate(date("2019-01-01 00:00:00")).setDesc("project desc"));
+        finDet.setProject(project);
+        assertEquals(finDet.getAcquireDate(), date(("2018-10-10 00:00:00")));
+    }
+    
+    @Test
+    public void acquire_date_is_not_mutated_upon_findet_retrieval() {
+    	final IEntityDao<AssetType> co1$ = co$(AssetType.class);
+        final AssetType at1 = co1$.findByKey("AT1");
+        final IAsset co2$ = co$(Asset.class);
+         
+        final Asset asset = save(co2$.new_().setAssetType(at1).setDesc("AS"));
+        final Project project = save(new_(Project.class).setName("test proj").setStartDate(date("2019-01-01 00:00:00")).setDesc("project desc"));
+        final AssetFinDet finDet = co$(AssetFinDet.class).findById(asset.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2018-10-10 00:00:00")).setProject(project);
+        
+        assertNotNull(finDet.getProject());
+        assertNotNull(finDet.getAcquireDate());
+        assertFalse(finDet.getProject().getProperty("acquireDate").isDirty());
+        assertEquals(finDet.getProject().getStartDate(), date("2019-01-01 00:00:00"));
+    }
+
     
     
     

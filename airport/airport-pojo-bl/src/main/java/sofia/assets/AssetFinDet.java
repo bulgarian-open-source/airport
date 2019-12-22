@@ -3,6 +3,7 @@ package sofia.assets;
 import java.util.Date;
 
 import sofia.assets.Asset;
+import sofia.assets.definers.AssetFinDetProjectDefiner;
 import sofia.assets.validators.FinDetAcquireDateWithinProjectPeriod;
 import sofia.projects.Project;
 import ua.com.fielden.platform.entity.AbstractPersistentEntity;
@@ -17,6 +18,7 @@ import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.SkipEntityExistsValidation;
 import ua.com.fielden.platform.entity.annotation.Title;
+import ua.com.fielden.platform.entity.annotation.mutator.AfterChange;
 import ua.com.fielden.platform.entity.annotation.mutator.BeforeChange;
 import ua.com.fielden.platform.entity.annotation.mutator.Handler;
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
@@ -59,6 +61,7 @@ public class AssetFinDet extends AbstractPersistentEntity<Asset> {
     @IsProperty
     @MapTo
     @Dependent("acquireDate")
+    @AfterChange(AssetFinDetProjectDefiner.class)
     @Title(value = "Project", desc = "Capital expenditure project to which the aquired asset belongs")
     private Project project;
     
