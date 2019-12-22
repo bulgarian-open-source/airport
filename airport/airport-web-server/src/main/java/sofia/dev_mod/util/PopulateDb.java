@@ -23,6 +23,7 @@ import sofia.organizational.Organization;
 import sofia.organizational.Role;
 import sofia.personnel.Person;
 import sofia.projects.Project;
+import sofia.service.tablecodes.ServiceStatus;
 import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.devdb_support.DomainDrivenDataPopulation;
 import ua.com.fielden.platform.entity.AbstractEntity;
@@ -107,6 +108,7 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         final Asset asset2 = save(new_(Asset.class).setDesc("demo asset 2").setAssetType(at1).setActive(true));
         final Asset asset3 = save(new_(Asset.class).setDesc("demo asset 3").setAssetType(at1).setActive(true));
         
+        
         final AssetFinDet finDet1 = co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
         save(finDet1.setInitCost(Money.of("120.00")).setAcquireDate(date("2019-12-07 00:00:00")));
         final AssetFinDet finDet2 = co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel());
@@ -116,6 +118,10 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         
         save(new_(Project.class).setName("PROJECT 1").setStartDate(date("2019-12-08 00:00:00")).setDesc("Project 1 description"));
         save(new_(Project.class).setName("PROJECT 2").setStartDate(date("2020-01-02 00:00:00")).setDesc("Project 2 description"));
+        
+        save(new_(ServiceStatus.class).setName("Outage").setDesc("Asset is in outage, urgent actions needed"));
+        save(new_(ServiceStatus.class).setName("Service interruption").setDesc("Asset service interrupted, urgent actions needed"));
+        save(new_(ServiceStatus.class).setName("Under repair").setDesc("Asset is temporarily unavailable, under repair"));
         LOGGER.info("Completed database creation and population.");
     }
 
