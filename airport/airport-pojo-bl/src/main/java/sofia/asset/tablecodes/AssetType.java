@@ -83,7 +83,7 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Override
     @Observable
     public AssetType setActive(boolean active) {
-        super.setActive(true);
+        super.setActive(active);
         return this;
     }
 
