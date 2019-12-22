@@ -19,8 +19,10 @@ import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenMain_Menu
 import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
 import sofia.service.tablecodes.ConditionRating;
 import sofia.assets.AssetFinDet;
-import sofia.projects.Project;
-import sofia.service.tablecodes.AssetServiceStatus;
+import sofia.organizational.Role;
+import sofia.organizational.BusinessUnit;
+import sofia.organizational.Organization;
+import sofia.asset.tablecodes.AssetTypeOwnership;
 
 /**
  * A class to register domain entities.
@@ -44,8 +46,10 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(AssetClassMaster_OpenAssetType_MenuItem.class);
         add(ConditionRating.class);
         add(AssetFinDet.class);
-        add(Project.class);
-        add(AssetServiceStatus.class);
+        add(Role.class);
+        add(BusinessUnit.class);
+        add(Organization.class);
+        add(AssetTypeOwnership.class);
     }
 
     private static void add(final Class<? extends AbstractEntity<?>> domainType) {

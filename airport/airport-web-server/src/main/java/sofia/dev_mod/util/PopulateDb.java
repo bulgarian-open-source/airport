@@ -18,6 +18,9 @@ import sofia.assets.Asset;
 import sofia.assets.AssetFinDet;
 import sofia.assets.IAssetFinDet;
 import sofia.config.ApplicationDomain;
+import sofia.organizational.BusinessUnit;
+import sofia.organizational.Organization;
+import sofia.organizational.Role;
 import sofia.personnel.Person;
 import sofia.projects.Project;
 import ua.com.fielden.platform.dao.IEntityDao;
@@ -88,8 +91,14 @@ public class PopulateDb extends DomainDrivenDataPopulation {
         setupPerson(User.system_users.SU, "sofia");
         
         final AssetClass as1 = save(new_(AssetClass.class).setName("AC1").setDesc("First description.").setActive(true));
-        save(new_(AssetClass.class).setName("AC2").setDesc("First description.").setActive(true));
-        save(new_(AssetType.class).setName("AT1").setDesc("First description.").setAssetClass(as1).setActive(true));
+
+        save(new_(AssetClass.class).setName("AC2").setDesc("First description."));
+        save(new_(AssetType.class).setName("AT1").setDesc("First description.").setAssetClass(as1).setActive(true   ));
+        
+        save(new_(Role.class).setName("R1").setDesc("First role"));
+        save(new_(BusinessUnit.class).setName("BU1").setDesc("First business unit"));
+        save(new_(Organization.class).setName("ORG1").setDesc("First organization"));
+
         
         final IEntityDao<AssetType> co1$ = co$(AssetType.class);
         final AssetType at1 = co1$.findByKey("AT1");
