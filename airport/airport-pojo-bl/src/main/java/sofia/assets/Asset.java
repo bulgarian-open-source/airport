@@ -63,6 +63,10 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     private AssetType assetType;
     
     @IsProperty
+    @Title(value = "regulatory", desc = "A flag for Assets that are legally regulated.")
+    private boolean regulatory;
+    
+    @IsProperty
     @Title(value = "Fin Det", desc = "Financial details for this asset")
     private AssetFinDet finDet;
 
@@ -105,9 +109,19 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public AssetType getAssetType() {
         return assetType;
     }
+    
+    @Observable
+    public Asset setRegulatory(final boolean regulatory) {
+        this.regulatory= regulatory;
+        return this;
+    }
+    
+    @Observable
+    public boolean getRegulatory() {
+        return regulatory;
+    }
 
    
-
     @Observable
     public Asset setNumber(final String number) {
         this.number = number;
