@@ -51,8 +51,12 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
         try {
             if (!wasPersisted) {
                 final IKeyNumber coKeyNumber = co(KeyNumber.class);
-                final Integer nextNumber = coKeyNumber.nextNumber("ASSET_NUMBER");
-                asset.setNumber(nextNumber.toString());
+                String nextNumber = coKeyNumber.nextNumber("ASSET_NUMBER").toString();
+                String toAdd = IntStream.range(0, 6 - nextNumber.length())
+                        .mapToObj(x -> "0")
+                        .collect(Collectors.joining());
+                asset.setNumber(toAdd.concat(nextNumber));
+                
             }
 
             // save asset
@@ -81,8 +85,12 @@ public class AssetDao extends CommonEntityDao<Asset> implements IAsset {
     
     @SessionRequired
     public Asset saveWithError(final Asset asset) {
-        save(asset);
-        throw Result.failure(ERR_FAILED_SAVE);
+        throwExceptionForTestingPurposes = true;
+        try {
+            return save(asset);
+        } finally {
+            throwExceptionForTestingPurposes = false;
+        }
     }
 
     @Override
