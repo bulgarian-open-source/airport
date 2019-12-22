@@ -128,5 +128,4 @@ public class PopulateDb extends DomainDrivenDataPopulation {
     protected List<Class<? extends AbstractEntity<?>>> domainEntityTypes() {
         return applicationDomainProvider.entityTypes();
     }
-
 }
