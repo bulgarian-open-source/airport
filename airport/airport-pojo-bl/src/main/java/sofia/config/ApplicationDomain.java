@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import sofia.personnel.Person;
+import sofia.projects.Project;
 import ua.com.fielden.platform.basic.config.IApplicationDomainProvider;
 import ua.com.fielden.platform.domain.PlatformDomainTypes;
 import ua.com.fielden.platform.entity.AbstractEntity;
@@ -17,6 +18,7 @@ import sofia.assets.Asset;
 import sofia.asset.tablecodes.ui_actions.OpenAssetClassMasterAction;
 import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
 import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
+import sofia.service.tablecodes.AssetServiceStatus;
 import sofia.service.tablecodes.ConditionRating;
 import sofia.assets.AssetFinDet;
 import sofia.organizational.Role;
@@ -24,6 +26,7 @@ import sofia.organizational.BusinessUnit;
 import sofia.organizational.Organization;
 import sofia.asset.tablecodes.AssetTypeOwnership;
 import sofia.asset.tablecodes.AssetTypeManagement;
+import sofia.asset.tablecodes.AssetTypeOperatorship;
 
 
 /**
@@ -46,6 +49,8 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(OpenAssetClassMasterAction.class);
         add(AssetClassMaster_OpenMain_MenuItem.class);
         add(AssetClassMaster_OpenAssetType_MenuItem.class);
+        add(Project.class);
+        add(AssetServiceStatus.class);
         add(ConditionRating.class);
         add(AssetFinDet.class);
         add(Role.class);

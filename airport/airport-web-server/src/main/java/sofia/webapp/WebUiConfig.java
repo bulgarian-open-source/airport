@@ -116,9 +116,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final BusinessUnitWebUiConfig buWebUiConfig = BusinessUnitWebUiConfig.register(injector(), builder);
         final OrganizationWebUiConfig orgWebUiConfig = OrganizationWebUiConfig.register(injector(), builder);
         final AssetServiceStatusWebUiConfig assetServiceStatusWebUiConfig = AssetServiceStatusWebUiConfig.register(injector(), builder);
-        final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
-        final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
-        
+       
         
         // Project related UI
         final ProjectWebUiConfig projectWebUiConfig = ProjectWebUiConfig.register(injector(), builder);

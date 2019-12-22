@@ -94,7 +94,7 @@ public class RoleWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<Role> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(1, 2);
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(2, 1);
 
         final IMaster<Role> masterConfig = new SimpleMasterBuilder<Role>().forEntity(Role.class)
                 .addProp("name").asSinglelineText().also()

@@ -94,7 +94,7 @@ public class BusinessUnitWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<BusinessUnit> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(1, 2);
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(2, 1);
 
         final IMaster<BusinessUnit> masterConfig = new SimpleMasterBuilder<BusinessUnit>().forEntity(BusinessUnit.class)
                 .addProp("name").asSinglelineText().also()
