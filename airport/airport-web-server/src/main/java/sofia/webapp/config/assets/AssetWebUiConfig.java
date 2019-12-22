@@ -5,6 +5,8 @@ import static sofia.common.StandardScrollingConfigs.standardStandaloneScrollingC
 
 import java.util.Optional;
 
+import org.apache.tools.ant.Project;
+
 import com.google.inject.Injector;
 
 import sofia.asset.tablecodes.AssetClass;
@@ -77,7 +79,7 @@ public class AssetWebUiConfig {
                 .addCrit("assetType").asMulti().autocompleter(AssetType.class).also()
                 .addCrit("active").asMulti().bool().also()
                 .addCrit("finDet.initCost").asRange().decimal().also()
-                .addCrit("finDet.acquireDate").asRange().date() 
+                .addCrit("finDet.acquireDate").asRange().date()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
@@ -87,7 +89,8 @@ public class AssetWebUiConfig {
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(200).also()
                 .addProp("finDet.initCost").width(150).also()
-                .addProp("finDet.acquireDate").width(150)
+                .addProp("finDet.acquireDate").width(150).also()
+                .addProp("finDet.project").width(150)
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
