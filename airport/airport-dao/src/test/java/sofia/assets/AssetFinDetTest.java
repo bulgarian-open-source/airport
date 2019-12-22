@@ -236,9 +236,10 @@ public class AssetFinDetTest extends AbstractDaoTestCase {
         assertNull(finDet.getAcquireDate());
         assertNull(finDet.getProject());
     	
-        final Project project = save(new_(Project.class).setName("test proj").setStartDate(date("2019-01-01 00:00:00")).setDesc("project desc"));
+        final Project newProject = save(new_(Project.class).setName("PROJECT 1").setStartDate(date("2019-12-08 00:00:00")).setDesc("Project description"));
+        final Project project = co(Project.class).findById(newProject.getId(), IAssetFinDet.FETCH_PROVIDER.<Project>fetchFor("project").fetchModel());
         finDet.setProject(project);
-        assertEquals(finDet.getAcquireDate(), finDet.getProject().getStartDate());
+        assertEquals(date("2019-12-08 00:00:00"), finDet.getAcquireDate());
     }
      
     @Test
@@ -258,24 +259,7 @@ public class AssetFinDetTest extends AbstractDaoTestCase {
         finDet.setProject(project);
         assertEquals(finDet.getAcquireDate(), date(("2018-10-10 00:00:00")));
     }
-    
-    @Test
-    public void acquire_date_is_not_mutated_upon_findet_retrieval() {
-    	final IEntityDao<AssetType> co1$ = co$(AssetType.class);
-        final AssetType at1 = co1$.findByKey("AT1");
-        final IAsset co2$ = co$(Asset.class);
-         
-        final Asset asset = save(co2$.new_().setAssetType(at1).setDesc("AS"));
-        final Project project = save(new_(Project.class).setName("test proj").setStartDate(date("2019-01-01 00:00:00")).setDesc("project desc"));
-        final AssetFinDet finDet = co$(AssetFinDet.class).findById(asset.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2018-10-10 00:00:00")).setProject(project);
         
-        assertNotNull(finDet.getProject());
-        assertNotNull(finDet.getAcquireDate());
-      //  assertEquals(finDet.getProject().getStartDate(), date("2019-01-01 00:00:00"));
-    }
-
-    
-    
     
     
     @Override
