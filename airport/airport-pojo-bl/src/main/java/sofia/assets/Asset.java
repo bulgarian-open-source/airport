@@ -48,8 +48,7 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(Asset.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
-	private static final Exception ValueException = null;
-
+	
     @IsProperty
     @MapTo
     @Title(value = "number", desc = "A unique asset number, auto-generated.")
@@ -69,7 +68,6 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     @IsProperty
     @MapTo
-    //@BeforeChange(@Handler(LoadingRateInzerohundredRangeValidator.class))
     @Title(value = "loadingRate", desc = "Loading/usage rate for the Asset.")
     private BigDecimal loadingRate;
     
@@ -89,12 +87,6 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Observable
     public Asset setLoadingRate(final BigDecimal loadingRate) throws Exception {
         this.loadingRate = loadingRate;
-        if (loadingRate == null) {
-        	return this;
-        }
-        if (loadingRate.compareTo(BigDecimal.valueOf(100)) == 1 || loadingRate.compareTo(BigDecimal.valueOf(0)) == -1) {
-        	throw new Exception("The loading rate should be in range 0 to 100");
-        }
         return this;
     }
     
