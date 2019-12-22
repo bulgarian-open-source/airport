@@ -3,6 +3,9 @@ package sofia.webapp;
 import org.apache.commons.lang.StringUtils;
 
 import sofia.config.personnel.PersonWebUiConfig;
+import sofia.organizational.BusinessUnit;
+import sofia.organizational.Organization;
+import sofia.organizational.Role;
 import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
@@ -15,6 +18,9 @@ import sofia.webapp.config.asset.tablecodes.AssetTypeOwnershipWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeWebUiConfig;
 import sofia.webapp.config.assets.AssetFinDetWebUiConfig;
 import sofia.webapp.config.assets.AssetWebUiConfig;
+import sofia.webapp.config.organizational.BusinessUnitWebUiConfig;
+import sofia.webapp.config.organizational.OrganizationWebUiConfig;
+import sofia.webapp.config.organizational.RoleWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ConditionRatingWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ServiceStatusWebUiConfig;
 import ua.com.fielden.platform.basic.config.Workflows;
@@ -91,13 +97,20 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder);
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
 
-        //Asset instance
+        // Asset instance
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
         final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
+        
+        // Organizational
+        final RoleWebUiConfig roleWebUiConfig = RoleWebUiConfig.register(injector(), builder);
+        final BusinessUnitWebUiConfig buWebUiConfig = BusinessUnitWebUiConfig.register(injector(), builder);
+        final OrganizationWebUiConfig orgWebUiConfig = OrganizationWebUiConfig.register(injector(), builder);
 
 
-
-
+        
+        
+        
+        
         // Configure application web resources such as masters and centres
         configApp()
         .addMaster(userWebUiConfig.master)
@@ -151,7 +164,17 @@ public class WebUiConfig extends AbstractWebUiConfig {
             .centre(conditionRatingWebUiConfig.centre).done()
         .done().
         done().done()
-    .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")
+        .addModule("Organizational").
+        description("Organizational entities").
+        icon("mainMenu:tablecodes").
+        detailIcon("mainMenu:tablecodes").
+        bgColor("#FFE689").
+        captionBgColor("#FFD42A").menu()
+            .addMenuItem(Role.ENTITY_TITLE).description(String.format("%s Centre", Role.ENTITY_TITLE)).centre(roleWebUiConfig.centre).done()
+            .addMenuItem(BusinessUnit.ENTITY_TITLE).description(String.format("%s Centre", BusinessUnit.ENTITY_TITLE)).centre(buWebUiConfig.centre).done()
+            .addMenuItem(Organization.ENTITY_TITLE).description(String.format("%s Centre", Organization.ENTITY_TITLE)).centre(orgWebUiConfig.centre).done()    
+    .done().done()
+    .setLayoutFor(Device.DESKTOP, null, "[[[], []], [[], []]]")
     .setLayoutFor(Device.TABLET, null,  "[[[{\"rowspan\":2}], []], [[]]]")
     .setLayoutFor(Device.MOBILE, null, "[ [[]],[[]], [[]], [[]] ]")
     .minCellWidth(100).minCellHeight(148).done();
