@@ -1,7 +1,12 @@
 package sofia.assets;
 
+import java.math.BigDecimal;
+
+import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
+import sofia.assets.validators.FinDetAcquireDateWithinProjectPeriod;
+import sofia.assets.validators.LoadingRateInzerohundredRangeValidator;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
@@ -18,6 +23,8 @@ import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Readonly;
 import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
+import ua.com.fielden.platform.entity.annotation.mutator.BeforeChange;
+import ua.com.fielden.platform.entity.annotation.mutator.Handler;
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
 import ua.com.fielden.platform.utils.Pair;
 
@@ -41,6 +48,7 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(Asset.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
+	private static final Exception ValueException = null;
 
     @IsProperty
     @MapTo
@@ -50,6 +58,7 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     private String number;
     
     @IsProperty
+    @MapTo
     @Required
     @Title(value = "assetType", desc = "An asset type for this asset.")
     private AssetType assetType;
@@ -58,6 +67,14 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Title(value = "Fin Det", desc = "Financial details for this asset")
     private AssetFinDet finDet;
 
+    @IsProperty
+    @MapTo
+    //@BeforeChange(@Handler(LoadingRateInzerohundredRangeValidator.class))
+    @Title(value = "loadingRate", desc = "Loading/usage rate for the Asset.")
+    private BigDecimal loadingRate;
+    
+    
+    
     @Observable
     public Asset setFinDet(final AssetFinDet finDet) {
         this.finDet = finDet;
@@ -69,7 +86,22 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     }
 
     
-
+    @Observable
+    public Asset setLoadingRate(final BigDecimal loadingRate) throws Exception {
+        this.loadingRate = loadingRate;
+        if (loadingRate == null) {
+        	return this;
+        }
+        if (loadingRate.compareTo(BigDecimal.valueOf(100)) == 1 || loadingRate.compareTo(BigDecimal.valueOf(0)) == -1) {
+        	throw new Exception("The loading rate should be in range 0 to 100");
+        }
+        return this;
+    }
+    
+    @Observable
+    public BigDecimal getLoadingRate() {
+        return loadingRate;
+    }
 
     @Observable
     public Asset setAssetType(final AssetType assetType) {
@@ -89,6 +121,7 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
         this.number = number;
         return this;
     }
+    
 
     public String getNumber() {
         return number;
