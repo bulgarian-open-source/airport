@@ -1,8 +1,6 @@
-package sofia.assets;
+package sofia.projects;
 
 
-import static sofia.assets.AssetDao.ERR_FAILED_SAVE;
-import static sofia.assets.AssetDao.DEFAULT_ASSET_NUMBER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -36,10 +34,13 @@ import org.junit.Test;
 
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
-import sofia.asset.tablecodes.IAssetClass;
+import sofia.assets.Asset;
+import sofia.assets.AssetDao;
+import sofia.assets.AssetFinDet;
+import sofia.assets.IAssetFinDet;
+import sofia.projects.validators.ProjectStartAndFinishDatesValidator;
 import sofia.test_config.AbstractDaoTestCase;
 import sofia.test_config.UniversalConstantsForTesting;
-import sofia.validators.NoSpacesValidator;
 import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.dao.QueryExecutionModel;
 import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
@@ -51,86 +52,84 @@ import ua.com.fielden.platform.error.Result;
 import ua.com.fielden.platform.types.Money;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 
-/**
- * This is a test case for {@link Asset}
- * 
- * @author Sofia-team
- *
- */
-
-
-public class AssetTest extends AbstractDaoTestCase {
+public class ProjectTest extends AbstractDaoTestCase {
     
     @Test
-    public void newly_saved_asset_has_number_generated() {
-        final IEntityDao<AssetType> co1$ = co$(AssetType.class);
-        final AssetType at1 = co1$.findByKey("AT1");
-
-        final IAsset co2$ = co$(Asset.class);
-      
-        final Asset asset = co2$.new_().setDesc("some asset desc").setAssetType(at1);
-        final Asset savedAsset = co2$.save(asset);
+    public void project_start_and_finish_do_not_permit_inverted_periods() {
+        final Project project = co(Project.class).new_().setName("Project 1").setDesc("Project 1 description");
+        project.setStartDate(date("2019-12-08 00:00:00")).setFinishDate(date("2019-11-08 00:00:00"));
         
+        assertFalse(project.isValid().isSuccessful());
+        assertTrue(project.getProperty("startDate").isValid());
+        assertFalse(project.getProperty("finishDate").isValid());
+        assertNull(project.getFinishDate());
         
-        assertNotNull(asset.getNumber());
-        assertEquals("000001", savedAsset.getNumber());
+        project.setStartDate(date("2019-10-08 00:00:00"));
+        assertTrue(project.getProperty("startDate").isValid());
+        assertTrue(project.getProperty("finishDate").isValid());
+        assertEquals(date("2019-10-08 00:00:00"), project.getStartDate());
+        assertEquals(date("2019-11-08 00:00:00"), project.getFinishDate());
+        assertTrue(project.isValid().isSuccessful());
+        
+        final Project savedProject = save(project);
+        assertTrue(co(Project.class).entityExists(savedProject));
     }
     
     @Test
-    public void existing_assets_keep_their_original_numbers() {
-        final IEntityDao<AssetType> co1$ = co$(AssetType.class);
-        final AssetType at1 = co1$.findByKey("AT1");
+    public void start_date_is_required_for_the_project() {
+        final Project project = co(Project.class).new_().setName("Project 1").setDesc("Project 1 description");
+        final Result validationResult = project.isValid();
+        assertFalse(validationResult.isSuccessful());
+        assertEquals("Required property [Start Date] is not specified for entity [Project].", validationResult.getMessage());
         
-        final IAsset co$ = co$(Asset.class);
-        final Asset asset = co$.new_().setDesc("some description").setAssetType(at1);
+        project.setStartDate(date("2019-10-08 00:00:00"));
+        assertTrue(project.isValid().isSuccessful());
         
-        final Asset savedAsset = co$.save(asset).setDesc("another description").setAssetType(at1);
-        assertTrue(savedAsset.isDirty());
-        
-        final Asset savedAsset2 = co$.save(savedAsset);
-        assertEquals("000001", savedAsset2.getNumber());
     }
     
     @Test
-    public void sequentially_created_assets_have_sequential_numbers() {
-        final IEntityDao<AssetType> co1$ = co$(AssetType.class);
-        final AssetType at1 = co1$.findByKey("AT1");
-        
-        final IAsset co$ = co$(Asset.class);
-        final Asset asset1 = co$.save(co$.new_().setDesc("asset 1 description").setAssetType(at1));
-        final Asset asset2 = co$.save(co$.new_().setDesc("asset 2 description").setAssetType(at1));
-        
-        assertEquals("000001", asset1.getNumber());
-        assertEquals("000002", asset2.getNumber());
-    }
-    
-    @Test
-    public void new_asset_can_be_saved_after_the_first_failed_attempt() {
+    public void start_date_cannot_be_after_acquired_date_for_associated_assets() {
+        final Project project = save(new_(Project.class).setName("PROJECT 1").setStartDate(date("2019-10-01 00:00:00")).setDesc("Project 1 description"));
         final IEntityDao<AssetType> co1$ = co$(AssetType.class);
         final AssetType at1 = co1$.findByKey("AT1");
         
         final AssetDao co$ = co$(Asset.class);
-        final Asset asset = co$.new_().setDesc("new desc").setAssetType(at1);
-        System.out.println(asset.getNumber());
-        // the first attempt to save asset should fail
-        try {
-            co$.saveWithError(asset);
-            fail("Should have failed the first saving attempt.");
-        } catch (final Result ex) {
-            assertEquals(ERR_FAILED_SAVE, ex.getMessage());
-        }
+        final Asset asset1 = save(co$.new_().setDesc("first desc").setAssetType(at1));
+        final Asset asset2 = save(co$.new_().setDesc("second desc").setAssetType(at1));
+        final Asset asset3 = save(co$.new_().setDesc("third desc").setAssetType(at1));
         
-        System.out.println(asset.isPersisted());
-        System.out.println(asset.getNumber());
-        
-        assertFalse(asset.isPersisted());
-        assertEquals(DEFAULT_ASSET_NUMBER, asset.getNumber());
-        
-        final Asset savedAsset = co$.save(asset);
-        assertTrue(savedAsset.isPersisted());
-        assertTrue(co$.entityExists(savedAsset));
-        assertEquals("000001", savedAsset.getNumber());
+        save(co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-10-02 00:00:00")).setProject(project));
+        save(co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-11-02 00:00:00")).setProject(project));
+        save(co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2020-01-02 00:00:00")).setProject(project));
+
+        project.setStartDate(date("2019-11-01 00:00:00"));
+        assertFalse(project.isValid().isSuccessful());
+        assertEquals(ProjectStartAndFinishDatesValidator.ERR_OUTSIDE_NEW_PERIOD_DUE_TO_START_DATE, project.isValid().getMessage());
     }
+    
+    @Test
+    public void finish_date_cannot_be_before_acquire_date_for_associated_assets() {
+        final Project project = save(new_(Project.class).setName("PROJECT 1")
+        		.setStartDate(date("2019-10-01 00:00:00"))
+        		.setFinishDate(date("2020-10-01 00:00:00"))
+        		.setDesc("Project 1 description"));
+        final IEntityDao<AssetType> co1$ = co$(AssetType.class);
+        final AssetType at1 = co1$.findByKey("AT1");
+        
+        final AssetDao co$ = co$(Asset.class);
+        final Asset asset1 = save(co$.new_().setDesc("first desc").setAssetType(at1));
+        final Asset asset2 = save(co$.new_().setDesc("second desc").setAssetType(at1));
+        final Asset asset3 = save(co$.new_().setDesc("third desc").setAssetType(at1));
+        
+        save(co$(AssetFinDet.class).findById(asset1.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-10-02 00:00:00")).setProject(project));
+        save(co$(AssetFinDet.class).findById(asset2.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2019-11-02 00:00:00")).setProject(project));
+        save(co$(AssetFinDet.class).findById(asset3.getId(), IAssetFinDet.FETCH_PROVIDER.fetchModel()).setAcquireDate(date("2020-01-02 00:00:00")).setProject(project));
+
+        project.setFinishDate(date("2020-01-01 00:00:00"));
+        assertFalse(project.isValid().isSuccessful());
+        assertEquals(ProjectStartAndFinishDatesValidator.ERR_OUTSIDE_NEW_PERIOD_DUE_TO_FINISH_DATE, project.isValid().getMessage());
+    }
+    
     
     
     @Override
@@ -140,7 +139,7 @@ public class AssetTest extends AbstractDaoTestCase {
 
     @Override
     public boolean useSavedDataPopulationScript() {
-        return true;
+        return false;
     }
 
     @Override
@@ -158,14 +157,14 @@ public class AssetTest extends AbstractDaoTestCase {
         if (useSavedDataPopulationScript()) {
             return;
         }
-
-        // AssetClass population for the test case
+        
         final AssetClass AC1 = new_composite(AssetClass.class, "AC1").setDesc("The first asset class");
         save(new_composite(AssetClass.class, "AC1").setDesc("The first asset class"));
         final IEntityDao<AssetClass> co$ = co$(AssetClass.class);
         final AssetClass ac1 = co$.findByKey("AC1");
         save(new_composite(AssetClass.class, "AC2").setDesc("The first asset class"));
         save(new_composite(AssetType.class, "AT1").setDesc("Some desc").setAssetClass(ac1));
+
     }
 
 }
