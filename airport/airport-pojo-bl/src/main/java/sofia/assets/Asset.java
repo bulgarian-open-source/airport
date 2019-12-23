@@ -2,6 +2,7 @@ package sofia.assets;
 
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
+import sofia.service.tablecodes.AssetServiceStatus;
 import sofia.assets.validators.FinDetAcquireDateWithinProjectPeriod;
 import sofia.validators.RateRangeValidator;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
@@ -20,6 +21,8 @@ import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Readonly;
 import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
+import ua.com.fielden.platform.entity.annotation.mutator.BeforeChange;
+import ua.com.fielden.platform.entity.annotation.mutator.Handler;
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
 import ua.com.fielden.platform.utils.Pair;
 
@@ -51,10 +54,21 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     private String number;
     
     @IsProperty
+    @MapTo
     @Required
     @Title(value = "assetType", desc = "An asset type for this asset.")
     private AssetType assetType;
     
+    @IsProperty
+    @MapTo
+    @Title(value = "regulatory", desc = "A flag for Assets that are legally regulated.")
+    private boolean regulatory;
+
+    @IsProperty
+    @MapTo
+    @Title(value = "keyService", desc = "A flag for Assets that are 'key service' assets.")
+    private boolean keyService;
+
     @IsProperty
     @Title(value = "Fin Det", desc = "Financial details for this asset")
     private AssetFinDet finDet;
@@ -64,19 +78,8 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @BeforeChange(@Handler(RateRangeValidator.class))
     @Title(value = "loadingRate", desc = "Loading/usage rate for the Asset.")
     private String loadingRate;
-    
-    
-    @Observable
-    public Asset setFinDet(final AssetFinDet finDet) {
-        this.finDet = finDet;
-        return this;
-    }
 
-    public AssetFinDet getFinDet() {
-        return finDet;
-    }
 
-    
     @Observable
     public Asset setLoadingRate(final String loadingRate) {
         if (!loadingRate.substring(loadingRate.length() - 1, loadingRate.length()).equals("%")) {
@@ -84,26 +87,14 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
         else {
             this.loadingRate = loadingRate;
         }
-        
+
         return this;
     }
-    
+
     @Observable
     public String getLoadingRate() {
         return loadingRate.substring(0, loadingRate.length() - 1);
     }
-
-    @Observable
-    public Asset setAssetType(final AssetType assetType) {
-        this.assetType = assetType;
-        return this;
-    }
-    
-    @Observable
-    public AssetType getAssetType() {
-        return assetType;
-    }
-
    
 
     @Observable
@@ -115,14 +106,14 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public String getNumber() {
         return number;
     }
-    
+
     @Override
     @Observable
     public Asset setDesc(String desc) {
         super.setDesc(desc);
         return this;
     }
-    
+
     @Override
     @Observable
     public Asset setActive(boolean active) {
@@ -130,6 +121,46 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
         return this;
     }
 
-    
+    @Observable
+    public Asset setAssetType(final AssetType assetType) {
+        this.assetType = assetType;
+        return this;
+    }
 
+    @Observable
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
+    @Observable
+    public Asset setRegulatory(final boolean regulatory) {
+        this.regulatory= regulatory;
+        return this;
+    }
+
+    @Observable
+    public boolean getRegulatory() {
+        return regulatory;
+    }
+
+    @Observable
+    public Asset setKeyService(final boolean keyService) {
+        this.keyService = keyService;
+        return this;
+    }
+
+    @Observable
+    public boolean getKeyService() {
+        return keyService;
+    }
+
+    @Observable
+    public Asset setFinDet(final AssetFinDet finDet) {
+        this.finDet = finDet;
+        return this;
+    }
+
+    public AssetFinDet getFinDet() {
+        return finDet;
+    }
 }
