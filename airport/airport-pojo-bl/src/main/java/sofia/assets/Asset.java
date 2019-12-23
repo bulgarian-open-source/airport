@@ -7,6 +7,8 @@ import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
 import sofia.assets.validators.FinDetAcquireDateWithinProjectPeriod;
 import sofia.assets.validators.LoadingRateInzerohundredRangeValidator;
+import sofia.validators.NoSpacesValidator;
+import sofia.validators.RateRangeValidator;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
@@ -72,8 +74,9 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     @IsProperty
     @MapTo
+    @BeforeChange(@Handler(RateRangeValidator.class))
     @Title(value = "loadingRate", desc = "Loading/usage rate for the Asset.")
-    private BigDecimal loadingRate;
+    private String loadingRate;
     
     
     
@@ -89,14 +92,19 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     
     @Observable
-    public Asset setLoadingRate(final BigDecimal loadingRate) throws Exception {
-        this.loadingRate = loadingRate;
+    public Asset setLoadingRate(final String loadingRate) {
+        if (!loadingRate.substring(loadingRate.length() - 1, loadingRate.length()).equals("%")) {
+            this.loadingRate = loadingRate.concat("%");}
+        else {
+            this.loadingRate = loadingRate;
+        }
+        
         return this;
     }
     
     @Observable
-    public BigDecimal getLoadingRate() {
-        return loadingRate;
+    public String getLoadingRate() {
+        return loadingRate.substring(0, loadingRate.length() - 1);
     }
 
     @Observable
