@@ -82,18 +82,23 @@ public class AssetWebUiConfig {
                 .addCrit("active").asMulti().bool().also()
                 .addCrit("finDet.initCost").asRange().decimal().also()
                 .addCrit("finDet.acquireDate").asRange().date().also()
+                .addCrit("regulatory").asMulti().bool().also()
+                .addCrit("keyService").asMulti().bool()
+                .addCrit("finDet.acquireDate").asRange().date().also()
                 .addCrit("loadingRate").asMulti().text()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
                 .withScrollingConfig(standardStandaloneScrollingConfig(0))
-                .addProp("this").order(1).asc().minWidth(100)
+                .addProp("this").order(1).asc().minWidth(25)
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Asset.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
-                .addProp("desc").minWidth(200).also()
-                .addProp("finDet.initCost").width(150).also()
-                .addProp("finDet.acquireDate").width(150).also()
-                .addProp("finDet.project").width(150)
+                .addProp("desc").minWidth(50).also()
+                .addProp("finDet.initCost").width(50).also()
+                .addProp("finDet.acquireDate").width(50).also()
+                .addProp("finDet.project").width(50).also()
+                .addProp("regulatory").width(25).also()
+                .addProp("keyService").width(25)
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
@@ -108,13 +113,15 @@ public class AssetWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<Asset> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(4, 1);
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(6, 1);
 
         final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
                 .addProp("number").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
                 .addProp("assetType").asAutocompleter().also()
                 .addProp("active").asCheckbox().also()
+                .addProp("regulatory").asCheckbox().also()
+                .addProp("keyService").asCheckbox().also()
                 .addProp("loadingRate").asSinglelineText().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
