@@ -59,7 +59,7 @@ public class AssetWebUiConfig {
      */
     private EntityCentre<Asset> createCentre(final Injector injector, final IWebUiBuilder builder) {
 
-        final String layout = LayoutComposer.mkGridForCentre(2, 3);
+        final String layout = LayoutComposer.mkGridForCentre(3, 3);
 
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(Asset.class);
@@ -79,13 +79,12 @@ public class AssetWebUiConfig {
                 .addCrit("this").asMulti().autocompleter(Asset.class).also()
                 .addCrit("desc").asMulti().text().also()
                 .addCrit("assetType").asMulti().autocompleter(AssetType.class).also()
-                .addCrit("active").asMulti().bool().also()
                 .addCrit("finDet.initCost").asRange().decimal().also()
                 .addCrit("finDet.acquireDate").asRange().date().also()
+                .addCrit("loadingRate").asMulti().text().also()
                 .addCrit("regulatory").asMulti().bool().also()
-                .addCrit("keyService").asMulti().bool()
-                .addCrit("finDet.acquireDate").asRange().date().also()
-                .addCrit("loadingRate").asMulti().text()
+                .addCrit("keyService").asMulti().bool().also()
+                .addCrit("active").asMulti().bool()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
@@ -113,7 +112,7 @@ public class AssetWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<Asset> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(6, 1);
+        final String layout = LayoutComposer.mkGridForMasterFitWidth(7, 1);
 
         final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
                 .addProp("number").asSinglelineText().also()

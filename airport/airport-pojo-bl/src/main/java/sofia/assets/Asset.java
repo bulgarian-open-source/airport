@@ -21,6 +21,8 @@ import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Readonly;
 import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
+import ua.com.fielden.platform.entity.annotation.mutator.BeforeChange;
+import ua.com.fielden.platform.entity.annotation.mutator.Handler;
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
 import ua.com.fielden.platform.utils.Pair;
 
@@ -93,18 +95,6 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public String getLoadingRate() {
         return loadingRate.substring(0, loadingRate.length() - 1);
     }
-
-    @Observable
-    public Asset setAssetType(final AssetType assetType) {
-        this.assetType = assetType;
-        return this;
-    }
-    
-    @Observable
-    public AssetType getAssetType() {
-        return assetType;
-    }
-
    
 
     @Observable
