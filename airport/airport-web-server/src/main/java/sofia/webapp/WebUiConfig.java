@@ -3,18 +3,30 @@ package sofia.webapp;
 import org.apache.commons.lang.StringUtils;
 
 import sofia.config.personnel.PersonWebUiConfig;
+import sofia.organizational.BusinessUnit;
+import sofia.organizational.Organization;
+import sofia.organizational.Role;
 import sofia.projects.Project;
 import sofia.service.tablecodes.AssetServiceStatus;
 import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
+import sofia.asset.tablecodes.AssetTypeOperatorship;
+import sofia.asset.tablecodes.AssetTypeManagement;
+import sofia.asset.tablecodes.AssetTypeOwnership;
 import sofia.assets.Asset;
 import sofia.assets.AssetFinDet;
 import sofia.webapp.config.asset.tablecodes.AssetClassWebUiConfig;
+import sofia.webapp.config.asset.tablecodes.AssetTypeOperatorshipWebUiConfig;
+import sofia.webapp.config.asset.tablecodes.AssetTypeManagementWebUiConfig;
+import sofia.webapp.config.asset.tablecodes.AssetTypeOwnershipWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeWebUiConfig;
 import sofia.webapp.config.assets.AssetFinDetWebUiConfig;
 import sofia.webapp.config.assets.AssetWebUiConfig;
+import sofia.webapp.config.organizational.BusinessUnitWebUiConfig;
+import sofia.webapp.config.organizational.OrganizationWebUiConfig;
+import sofia.webapp.config.organizational.RoleWebUiConfig;
 import sofia.webapp.config.projects.ProjectWebUiConfig;
 import sofia.webapp.config.service.tablecodes.AssetServiceStatusWebUiConfig;
 import sofia.webapp.config.service.tablecodes.ConditionRatingWebUiConfig;
@@ -87,25 +99,33 @@ public class WebUiConfig extends AbstractWebUiConfig {
         // Asset table codes
         final AssetClassWebUiConfig assetClassWebUiConfig = AssetClassWebUiConfig.register(injector(), builder);
         final AssetTypeWebUiConfig assetTypeWebUiConfig = AssetTypeWebUiConfig.register(injector(), builder);
-        
+        final AssetTypeOwnershipWebUiConfig assetTypeOwnershipWebUiConfig = AssetTypeOwnershipWebUiConfig.register(injector(), builder);
+        final AssetTypeOperatorshipWebUiConfig assetTypeOperatorshipWebUiConfig = AssetTypeOperatorshipWebUiConfig.register(injector(), builder);
+        final AssetTypeManagementWebUiConfig assetTypeManagementWebUiConfig = AssetTypeManagementWebUiConfig.register(injector(), builder);
+      
         // Service Status table codes
         final ServiceStatusWebUiConfig serviceStatusWebUiConfig = ServiceStatusWebUiConfig.register(injector(), builder);
         final ConditionRatingWebUiConfig conditionRatingWebUiConfig = ConditionRatingWebUiConfig.register(injector(), builder);
-        final AssetServiceStatusWebUiConfig assetServiceStatusWebUiConfig = AssetServiceStatusWebUiConfig.register(injector(), builder);
-
-        
-
-        // Asset related UI
+      
+        // Asset instance
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
         final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
         
+        // Organizational
+        final RoleWebUiConfig roleWebUiConfig = RoleWebUiConfig.register(injector(), builder);
+        final BusinessUnitWebUiConfig buWebUiConfig = BusinessUnitWebUiConfig.register(injector(), builder);
+        final OrganizationWebUiConfig orgWebUiConfig = OrganizationWebUiConfig.register(injector(), builder);
+        final AssetServiceStatusWebUiConfig assetServiceStatusWebUiConfig = AssetServiceStatusWebUiConfig.register(injector(), builder);
+       
         
         // Project related UI
         final ProjectWebUiConfig projectWebUiConfig = ProjectWebUiConfig.register(injector(), builder);
 
 
-
-
+        
+        
+        
+        
         // Configure application web resources such as masters and centres
         configApp()
         .addMaster(userWebUiConfig.master)
@@ -151,6 +171,9 @@ public class WebUiConfig extends AbstractWebUiConfig {
             .addMenuItem("Asset Table Codes").description("Various master data for assets.")
                 .addMenuItem(AssetClass.ENTITY_TITLE).description(String.format("%s Centre", AssetClass.ENTITY_TITLE)).centre(assetClassWebUiConfig.centre).done()
                 .addMenuItem(AssetType.ENTITY_TITLE).description(String.format("%s Centre", AssetType.ENTITY_TITLE)).centre(assetTypeWebUiConfig.centre).done()
+                .addMenuItem(AssetTypeOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOwnership.ENTITY_TITLE)).centre(assetTypeOwnershipWebUiConfig.centre).done()
+                .addMenuItem(AssetTypeOperatorship.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeOperatorship.ENTITY_TITLE)).centre(assetTypeOperatorshipWebUiConfig.centre).done()
+                .addMenuItem(AssetTypeManagement.ENTITY_TITLE).description(String.format("%s Centre", AssetTypeManagement.ENTITY_TITLE)).centre(assetTypeManagementWebUiConfig.centre).done()
                 .addMenuItem(AssetServiceStatus.ENTITY_TITLE).description(String.format("%s Centre", AssetServiceStatus.ENTITY_TITLE)).centre(assetServiceStatusWebUiConfig.centre).done()
             .done()
             .addMenuItem("Asset Service Codes").description("Various master data for assets service.")
@@ -158,7 +181,17 @@ public class WebUiConfig extends AbstractWebUiConfig {
             .addMenuItem(ConditionRating.ENTITY_TITLE).description(String.format("%s Centre", ConditionRating.ENTITY_TITLE)).centre(conditionRatingWebUiConfig.centre).done()
         .done().
         done().done()
-    .setLayoutFor(Device.DESKTOP, null, "[[[{\"rowspan\":2}], []], [[]]]")
+        .addModule("Organizational").
+        description("Organizational entities").
+        icon("mainMenu:tablecodes").
+        detailIcon("mainMenu:tablecodes").
+        bgColor("#FFE689").
+        captionBgColor("#FFD42A").menu()
+            .addMenuItem(Role.ENTITY_TITLE).description(String.format("%s Centre", Role.ENTITY_TITLE)).centre(roleWebUiConfig.centre).done()
+            .addMenuItem(BusinessUnit.ENTITY_TITLE).description(String.format("%s Centre", BusinessUnit.ENTITY_TITLE)).centre(buWebUiConfig.centre).done()
+            .addMenuItem(Organization.ENTITY_TITLE).description(String.format("%s Centre", Organization.ENTITY_TITLE)).centre(orgWebUiConfig.centre).done()    
+    .done().done()
+    .setLayoutFor(Device.DESKTOP, null, "[[[], []], [[], []]]")
     .setLayoutFor(Device.TABLET, null,  "[[[{\"rowspan\":2}], []], [[]]]")
     .setLayoutFor(Device.MOBILE, null, "[ [[]],[[]], [[]], [[]] ]")
     .minCellWidth(100).minCellHeight(148).done();

@@ -1,13 +1,8 @@
 package sofia.assets;
 
-import java.math.BigDecimal;
-
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
 import sofia.assets.validators.FinDetAcquireDateWithinProjectPeriod;
-import sofia.assets.validators.LoadingRateInzerohundredRangeValidator;
-import sofia.validators.NoSpacesValidator;
 import sofia.validators.RateRangeValidator;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
@@ -25,8 +20,6 @@ import ua.com.fielden.platform.entity.annotation.Observable;
 import ua.com.fielden.platform.entity.annotation.Readonly;
 import ua.com.fielden.platform.entity.annotation.Required;
 import ua.com.fielden.platform.entity.annotation.Title;
-import ua.com.fielden.platform.entity.annotation.mutator.BeforeChange;
-import ua.com.fielden.platform.entity.annotation.mutator.Handler;
 import ua.com.fielden.platform.reflection.TitlesDescsGetter;
 import ua.com.fielden.platform.utils.Pair;
 
@@ -43,14 +36,13 @@ import ua.com.fielden.platform.utils.Pair;
 @DescTitle("Description")
 @DisplayDescription
 @DescRequired
-// TODO: May need this later if some entities need to be automatically cascade-deactivated when this entity is deactivated
 // @DeactivatableDependencies({ Dependency1.class, Dependency2.class, Dependency3.class })
 public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(Asset.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
-	
+
     @IsProperty
     @MapTo
     @Title(value = "number", desc = "A unique asset number, auto-generated.")
@@ -59,14 +51,9 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     private String number;
     
     @IsProperty
-    @MapTo
     @Required
     @Title(value = "assetType", desc = "An asset type for this asset.")
     private AssetType assetType;
-    
-    @IsProperty
-    @Title(value = "regulatory", desc = "A flag for Assets that are legally regulated.")
-    private boolean regulatory;
     
     @IsProperty
     @Title(value = "Fin Det", desc = "Financial details for this asset")
@@ -77,7 +64,6 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @BeforeChange(@Handler(RateRangeValidator.class))
     @Title(value = "loadingRate", desc = "Loading/usage rate for the Asset.")
     private String loadingRate;
-    
     
     
     @Observable
@@ -117,25 +103,14 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public AssetType getAssetType() {
         return assetType;
     }
-    
-    @Observable
-    public Asset setRegulatory(final boolean regulatory) {
-        this.regulatory= regulatory;
-        return this;
-    }
-    
-    @Observable
-    public boolean getRegulatory() {
-        return regulatory;
-    }
 
    
+
     @Observable
     public Asset setNumber(final String number) {
         this.number = number;
         return this;
     }
-    
 
     public String getNumber() {
         return number;
