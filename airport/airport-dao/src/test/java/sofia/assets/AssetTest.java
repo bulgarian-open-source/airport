@@ -40,6 +40,7 @@ import sofia.asset.tablecodes.IAssetClass;
 import sofia.test_config.AbstractDaoTestCase;
 import sofia.test_config.UniversalConstantsForTesting;
 import sofia.validators.NoSpacesValidator;
+import sofia.validators.RateRangeValidator;
 import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.dao.QueryExecutionModel;
 import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
@@ -60,6 +61,29 @@ import ua.com.fielden.platform.utils.IUniversalConstants;
 
 
 public class AssetTest extends AbstractDaoTestCase {
+    
+    
+    @Test
+    public void asset_has_correct_load_rate() {
+        final IEntityDao<AssetType> co1$ = co$(AssetType.class);
+        final AssetType at1 = co1$.findByKey("AT1");
+
+        final IAsset co2$ = co$(Asset.class);
+      
+        final Asset asset = co2$.new_().setDesc("some asset desc").setAssetType(at1);
+        
+        asset.setLoadingRate("zero");
+        assertFalse(asset.isValid().isSuccessful());
+        assertEquals(RateRangeValidator.NOT_A_NUMBER, asset.isValid().getMessage());
+        
+        asset.setLoadingRate("120");
+        assertFalse(asset.isValid().isSuccessful());
+        assertEquals(RateRangeValidator.INCORRECT_RANGE, asset.isValid().getMessage());
+        
+        
+        asset.setLoadingRate("50");
+        assertTrue(asset.isValid().isSuccessful());    
+    }
     
     @Test
     public void newly_saved_asset_has_number_generated() {

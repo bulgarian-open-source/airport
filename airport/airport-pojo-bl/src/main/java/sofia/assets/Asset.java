@@ -2,6 +2,8 @@ package sofia.assets;
 
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetType;
+import sofia.assets.validators.FinDetAcquireDateWithinProjectPeriod;
+import sofia.validators.RateRangeValidator;
 import ua.com.fielden.platform.entity.ActivatableAbstractEntity;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
@@ -57,6 +59,13 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Title(value = "Fin Det", desc = "Financial details for this asset")
     private AssetFinDet finDet;
 
+    @IsProperty
+    @MapTo
+    @BeforeChange(@Handler(RateRangeValidator.class))
+    @Title(value = "loadingRate", desc = "Loading/usage rate for the Asset.")
+    private String loadingRate;
+    
+    
     @Observable
     public Asset setFinDet(final AssetFinDet finDet) {
         this.finDet = finDet;
@@ -68,7 +77,21 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     }
 
     
-
+    @Observable
+    public Asset setLoadingRate(final String loadingRate) {
+        if (!loadingRate.substring(loadingRate.length() - 1, loadingRate.length()).equals("%")) {
+            this.loadingRate = loadingRate.concat("%");}
+        else {
+            this.loadingRate = loadingRate;
+        }
+        
+        return this;
+    }
+    
+    @Observable
+    public String getLoadingRate() {
+        return loadingRate.substring(0, loadingRate.length() - 1);
+    }
 
     @Observable
     public Asset setAssetType(final AssetType assetType) {
