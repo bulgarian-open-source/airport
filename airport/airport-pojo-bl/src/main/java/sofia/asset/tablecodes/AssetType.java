@@ -86,6 +86,8 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
     }
     
     
+    
+    
     @IsProperty
     @Readonly
     @Calculated
