@@ -31,6 +31,7 @@ import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
 import ua.com.fielden.platform.entity.meta.MetaProperty;
 import ua.com.fielden.platform.error.Result;
+import ua.com.fielden.platform.utils.EntityUtils;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 
 /**
@@ -192,14 +193,41 @@ public class AssetTypeOwnershipTest extends AbstractDaoTestCase {
         assertNotNull(save(ownership).getOrg());
     }
     
+//    @Test
+//    public void currOwnership_for_asset_type_finds_the_latest_ownership() {
+//        final AssetType at1 = co(AssetType.class).findByKeyAndFetch(IAssetTypeOwnership.FETCH_PROVIDER.<AssetType>fetchFor("assetType").fetchModel(), "AT1");
+//        final Role r1 = co(Role.class).findByKeyAndFetch(IAssetTypeOwnership.FETCH_PROVIDER.<Role>fetchFor("role").fetchModel(), "R1");
+//        final BusinessUnit bu1 = co(BusinessUnit.class).findByKeyAndFetch(IAssetTypeOwnership.FETCH_PROVIDER.<BusinessUnit>fetchFor("bu").fetchModel(), "BU1");
+//        final Organization org1 = co(Organization.class).findByKeyAndFetch(IAssetTypeOwnership.FETCH_PROVIDER.<Organization>fetchFor("org").fetchModel(), "ORG1");
+//        
+//        final AssetTypeOwnership o1 =  save(co(AssetTypeOwnership.class).new_()
+//                .setAssetType(at1)
+//                .setStartDate(date("2019-12-01 00:00:00"))
+//                .setRole(r1));
+//        
+//        final AssetTypeOwnership o2 =  save(co(AssetTypeOwnership.class).new_()
+//                .setAssetType(at1)
+//                .setStartDate(date("2019-12-02 00:00:00"))
+//                .setBu(bu1));
+//        
+//        final AssetTypeOwnership o3 =  save(co(AssetTypeOwnership.class).new_()
+//                .setAssetType(at1)
+//                .setStartDate(date("2019-12-03 00:00:00"))
+//                .setOrg(org1));
+//        
+//        final AssetType at1WithCurrOwnership = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOwnership").fetchModel());
+//        assertEquals(o3, at1WithCurrOwnership.getCurrOwnership());
+//    }
+//    
+    
     @Override
     public boolean saveDataPopulationScriptToFile() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean useSavedDataPopulationScript() {
-        return true;
+        return false;
     }
 
     @Override
