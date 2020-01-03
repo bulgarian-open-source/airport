@@ -58,7 +58,7 @@ public class AssetTypeWebUiConfig {
      * @return created entity centre
      */
     private EntityCentre<AssetType> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkVarGridForCentre(2, 2, 3, 1);
+        final String layout = LayoutComposer.mkVarGridForCentre(2, 2, 3, 1, 3, 1);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(AssetType.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetType.class);
@@ -81,7 +81,11 @@ public class AssetTypeWebUiConfig {
                 .addCrit("currOwnership.role").asMulti().autocompleter(Role.class).also()
                 .addCrit("currOwnership.bu").asMulti().autocompleter(BusinessUnit.class).also()
                 .addCrit("currOwnership.org").asMulti().autocompleter(Organization.class).also()
-                .addCrit("currOwnership.startDate").asRange().date()
+                .addCrit("currOwnership.startDate").asRange().date().also()
+                .addCrit("currManagement.role").asMulti().autocompleter(Role.class).also()
+                .addCrit("currManagement.bu").asMulti().autocompleter(BusinessUnit.class).also()
+                .addCrit("currManagement.org").asMulti().autocompleter(Organization.class).also()
+                .addCrit("currManagement.startDate").asRange().date()
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
@@ -110,7 +114,7 @@ public class AssetTypeWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<AssetType> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkVarGridForMasterFitWidth(1, 1, 2, 4);
+        final String layout = LayoutComposer.mkVarGridForMasterFitWidth(1, 1, 2, 4, 4);
 
         final IMaster<AssetType> masterConfig = new SimpleMasterBuilder<AssetType>().forEntity(AssetType.class)
                 .addProp("name").asSinglelineText().also()
@@ -121,6 +125,10 @@ public class AssetTypeWebUiConfig {
                 .addProp("currOwnership.bu").asAutocompleter().also()
                 .addProp("currOwnership.org").asAutocompleter().also()
                 .addProp("currOwnership.startDate").asDatePicker().also()
+                .addProp("currManagement.role").asAutocompleter().also()
+                .addProp("currManagement.bu").asAutocompleter().also()
+                .addProp("currManagement.org").asAutocompleter().also()
+                .addProp("currManagement.startDate").asDatePicker().also()
                 .addAction(MasterActions.REFRESH).shortDesc("Cancel").longDesc("Cancel action")
                 .addAction(MasterActions.SAVE)
                 .setActionBarLayoutFor(Device.DESKTOP, Optional.empty(), LayoutComposer.mkActionLayoutForMaster())

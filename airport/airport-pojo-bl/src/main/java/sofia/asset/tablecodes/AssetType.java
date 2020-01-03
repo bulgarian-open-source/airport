@@ -61,6 +61,26 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
     @IsProperty
     @Readonly
     @Calculated
+    @Title(value = "Curr Management", desc = "Current management for this type.")
+    @Subtitles({@PathTitle(path="role", title="Management Role"),
+                @PathTitle(path="bu", title="Management Business Unit"),
+                @PathTitle(path="org", title="Management Organization"),
+                @PathTitle(path="startDate", title="Management Start Date")})
+    private AssetTypeManagement currManagement;
+    
+    private static final EntityResultQueryModel<AssetTypeManagement> managementSubQuery = select(AssetTypeManagement.class).where()
+                                                                                .prop("assetType").eq().extProp("assetType").and()
+                                                                                .prop("startDate").le().now().and()
+                                                                                .prop("startDate").gt().extProp("startDate").model();
+    
+    protected static final ExpressionModel currManagement_ = expr().model(select(AssetTypeManagement.class)
+                                                                .where().prop("assetType").eq().extProp("id").and()
+                                                                .prop("startDate").le().now().and()
+                                                                .notExists(managementSubQuery).model()).model();
+
+    @IsProperty
+    @Readonly
+    @Calculated
     @Title(value = "Curr Ownership", desc = "Desc")
     @Subtitles({@PathTitle(path="role", title="Ownership Role"),
                 @PathTitle(path="bu", title="Ownership Business Unit"),
@@ -68,7 +88,7 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
                 @PathTitle(path="startDate", title="Ownership Start Date")})
     private AssetTypeOwnership currOwnership;
     
-    private static final EntityResultQueryModel<AssetTypeOwnership> subQuery = select(AssetTypeOwnership.class).where()
+    private static final EntityResultQueryModel<AssetTypeOwnership> ownershipSubQuery = select(AssetTypeOwnership.class).where()
                                                                                 .prop("assetType").eq().extProp("assetType").and()
                                                                                 .prop("startDate").le().now().and()
                                                                                 .prop("startDate").gt().extProp("startDate").model();
@@ -76,7 +96,7 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
     protected static final ExpressionModel currOwnership_ = expr().model(select(AssetTypeOwnership.class)
                                                             .where().prop("assetType").eq().extProp("id").and()
                                                             .prop("startDate").le().now().and()
-                                                            .notExists(subQuery).model()).model();
+                                                            .notExists(ownershipSubQuery).model()).model();
 
     @Observable
     protected AssetType setCurrOwnership(final AssetTypeOwnership currOwnership) {
@@ -86,6 +106,16 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
 
     public AssetTypeOwnership getCurrOwnership() {
         return currOwnership;
+    }
+    
+    @Observable
+    protected AssetType setCurrManagement(final AssetTypeManagement currManagement) {
+        this.currManagement = currManagement;
+        return this;
+    }
+
+    public AssetTypeManagement getCurrManagement() {
+        return currManagement;
     }
 
 

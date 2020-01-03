@@ -31,6 +31,7 @@ import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
 import ua.com.fielden.platform.entity.meta.MetaProperty;
 import ua.com.fielden.platform.error.Result;
+import ua.com.fielden.platform.utils.EntityUtils;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 
 /**
@@ -191,6 +192,60 @@ public class AssetTypeManagementTest extends AbstractDaoTestCase {
         assertTrue(management.getProperty("org").isRequired());   
         
         assertNotNull(save(management).getOrg());
+    }
+    
+    @Test
+    public void currManagement_for_asset_type_finds_the_latest_ownership() {
+        final AssetType at1 = co(AssetType.class).findByKeyAndFetch(IAssetTypeManagement.FETCH_PROVIDER.<AssetType>fetchFor("assetType").fetchModel(), "AT1");
+        final Role r1 = co(Role.class).findByKeyAndFetch(IAssetTypeManagement.FETCH_PROVIDER.<Role>fetchFor("role").fetchModel(), "R1");
+        final BusinessUnit bu1 = co(BusinessUnit.class).findByKeyAndFetch(IAssetTypeManagement.FETCH_PROVIDER.<BusinessUnit>fetchFor("bu").fetchModel(), "BU1");
+        final Organization org1 = co(Organization.class).findByKeyAndFetch(IAssetTypeManagement.FETCH_PROVIDER.<Organization>fetchFor("org").fetchModel(), "ORG1");
+
+
+        final AssetTypeManagement o0 =  save(co(AssetTypeManagement.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-11-12 00:00:00"))
+                .setOrg(org1));
+
+        final AssetTypeManagement o1 =  save(co(AssetTypeManagement.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-12-01 00:00:00"))
+                .setRole(r1));
+
+        final AssetTypeManagement o2 =  save(co(AssetTypeManagement.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-12-02 00:00:00"))
+                .setBu(bu1));
+
+        final AssetTypeManagement o3 =  save(co(AssetTypeManagement.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-12-13 00:00:00"))
+                .setOrg(org1));
+
+        final AssetTypeManagement o4 =  save(co(AssetTypeManagement.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2020-01-01 00:00:00"))
+                .setBu(bu1));
+
+        final UniversalConstantsForTesting constants = (UniversalConstantsForTesting) getInstance(IUniversalConstants.class);
+        constants.setNow(dateTime("2019-11-01 11:30:00"));
+
+        final AssetType at1WithCurrManagement1 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currManagement").fetchModel());
+        assertNull(at1WithCurrManagement1.getCurrManagement());
+
+        constants.setNow(dateTime("2019-11-15 11:30:00"));
+        final AssetType at1WithCurrManagement2 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currManagement").fetchModel());
+        assertEquals(o0, at1WithCurrManagement2.getCurrManagement());
+
+        constants.setNow(dateTime("2019-12-01 11:30:00"));
+        final AssetType at1WithCurrManagement3 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currManagement").fetchModel());
+        assertEquals(o1, at1WithCurrManagement3.getCurrManagement());
+
+        constants.setNow(dateTime("2020-02-01 11:30:00"));
+        final AssetType at1WithCurrManagement4 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currManagement").fetchModel());
+        assertEquals(o4, at1WithCurrManagement4.getCurrManagement());
+
+
     }
     
     @Override
