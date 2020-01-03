@@ -1,36 +1,21 @@
 package sofia.asset.tablecodes;
 
 
-import static sofia.assets.AssetDao.ERR_FAILED_SAVE;
-import static sofia.assets.AssetDao.DEFAULT_ASSET_NUMBER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
-import sofia.asset.tablecodes.AssetClass;
-import sofia.asset.tablecodes.AssetType;
-import sofia.asset.tablecodes.IAssetClass;
 import sofia.organizational.BusinessUnit;
 import sofia.organizational.Organization;
 import sofia.organizational.Role;
 import sofia.test_config.AbstractDaoTestCase;
 import sofia.test_config.UniversalConstantsForTesting;
-import sofia.validators.NoSpacesValidator;
-import ua.com.fielden.platform.dao.IEntityDao;
 import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
-import ua.com.fielden.platform.entity.meta.MetaProperty;
-import ua.com.fielden.platform.error.Result;
 import ua.com.fielden.platform.utils.EntityUtils;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 

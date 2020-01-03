@@ -88,10 +88,6 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
         return currOwnership;
     }
 
-    
-
-    
-
 
     @Observable
     public AssetType setAssetClass(final AssetClass assetClass) {
