@@ -7,9 +7,8 @@ import java.util.Optional;
 
 import com.google.inject.Injector;
 
+import sofia.asset.tablecodes.AssetOperatorship;
 import sofia.asset.tablecodes.AssetOwnership;
-import sofia.asset.tablecodes.AssetType;
-import sofia.asset.tablecodes.AssetTypeOwnership;
 import sofia.assets.Asset;
 import sofia.common.LayoutComposer;
 import sofia.common.StandardActions;
@@ -23,7 +22,7 @@ import ua.com.fielden.platform.web.view.master.api.actions.MasterActions;
 import ua.com.fielden.platform.web.view.master.api.impl.SimpleMasterBuilder;
 import ua.com.fielden.platform.web.view.master.api.IMaster;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
-import sofia.main.menu.asset.tablecodes.MiAssetOwnership;
+import sofia.main.menu.asset.tablecodes.MiAssetOperatorship;
 import sofia.organizational.BusinessUnit;
 import sofia.organizational.Organization;
 import sofia.organizational.Role;
@@ -32,21 +31,21 @@ import ua.com.fielden.platform.web.view.master.EntityMaster;
 import static ua.com.fielden.platform.web.PrefDim.mkDim;
 import ua.com.fielden.platform.web.PrefDim.Unit;
 /**
- * {@link AssetOwnership} Web UI configuration.
+ * {@link AssetOperatorship} Web UI configuration.
  *
  * @author Developers
  *
  */
-public class AssetOwnershipWebUiConfig {
+public class AssetOperatorshipWebUiConfig {
 
-    public final EntityCentre<AssetOwnership> centre;
-    public final EntityMaster<AssetOwnership> master;
+    public final EntityCentre<AssetOperatorship> centre;
+    public final EntityMaster<AssetOperatorship> master;
 
-    public static AssetOwnershipWebUiConfig register(final Injector injector, final IWebUiBuilder builder) {
-        return new AssetOwnershipWebUiConfig(injector, builder);
+    public static AssetOperatorshipWebUiConfig register(final Injector injector, final IWebUiBuilder builder) {
+        return new AssetOperatorshipWebUiConfig(injector, builder);
     }
 
-    private AssetOwnershipWebUiConfig(final Injector injector, final IWebUiBuilder builder) {
+    private AssetOperatorshipWebUiConfig(final Injector injector, final IWebUiBuilder builder) {
         centre = createCentre(injector, builder);
         builder.register(centre);
         master = createMaster(injector);
@@ -54,22 +53,22 @@ public class AssetOwnershipWebUiConfig {
     }
 
     /**
-     * Creates entity centre for {@link AssetOwnership}.
+     * Creates entity centre for {@link AssetOperatorship}.
      *
      * @param injector
      * @return created entity centre
      */
-    private EntityCentre<AssetOwnership> createCentre(final Injector injector, final IWebUiBuilder builder) {
+    private EntityCentre<AssetOperatorship> createCentre(final Injector injector, final IWebUiBuilder builder) {
         final String layout = LayoutComposer.mkVarGridForCentre(2, 3);
 
-        final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(AssetOwnership.class);
-        final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetOwnership.class);
-        final EntityActionConfig standardExportAction = StandardActions.EXPORT_ACTION.mkAction(AssetOwnership.class);
-        final EntityActionConfig standardEditAction = StandardActions.EDIT_ACTION.mkAction(AssetOwnership.class);
+        final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(AssetOperatorship.class);
+        final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetOperatorship.class);
+        final EntityActionConfig standardExportAction = StandardActions.EXPORT_ACTION.mkAction(AssetOperatorship.class);
+        final EntityActionConfig standardEditAction = StandardActions.EDIT_ACTION.mkAction(AssetOperatorship.class);
         final EntityActionConfig standardSortAction = CentreConfigActions.CUSTOMISE_COLUMNS_ACTION.mkAction();
-        builder.registerOpenMasterAction(AssetOwnership.class, standardEditAction);
+        builder.registerOpenMasterAction(AssetOperatorship.class, standardEditAction);
 
-        final EntityCentreConfig<AssetOwnership> ecc = EntityCentreBuilder.centreFor(AssetOwnership.class)
+        final EntityCentreConfig<AssetOperatorship> ecc = EntityCentreBuilder.centreFor(AssetOperatorship.class)
                 //.runAutomatically()
                 .addFrontAction(standardNewAction)
                 .addTopAction(standardNewAction).also()
@@ -86,7 +85,7 @@ public class AssetOwnershipWebUiConfig {
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
                 .withScrollingConfig(standardStandaloneScrollingConfig(0))
                 .addProp("asset").order(1).asc().minWidth(100)
-                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetOwnership.ENTITY_TITLE))
+                    .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetOperatorship.ENTITY_TITLE))
                     .withActionSupplier(builder.getOpenMasterAction(Asset.class)).also()
                 .addProp("startDate").order(2).desc().width(150).also()
                 .addProp("role").minWidth(100).also()
@@ -96,19 +95,19 @@ public class AssetOwnershipWebUiConfig {
                 .addPrimaryAction(standardEditAction)
                 .build();
 
-        return new EntityCentre<>(MiAssetOwnership.class, MiAssetOwnership.class.getSimpleName(), ecc, injector, null);
+        return new EntityCentre<>(MiAssetOperatorship.class, MiAssetOperatorship.class.getSimpleName(), ecc, injector, null);
     }
 
     /**
-     * Creates entity master for {@link AssetOwnership}.
+     * Creates entity master for {@link AssetOperatorship}.
      *
      * @param injector
      * @return created entity master
      */
-    private EntityMaster<AssetOwnership> createMaster(final Injector injector) {
+    private EntityMaster<AssetOperatorship> createMaster(final Injector injector) {
         final String layout = LayoutComposer.mkGridForMasterFitWidth(5, 1);
 
-        final IMaster<AssetOwnership> masterConfig = new SimpleMasterBuilder<AssetOwnership>().forEntity(AssetOwnership.class)
+        final IMaster<AssetOperatorship> masterConfig = new SimpleMasterBuilder<AssetOperatorship>().forEntity(AssetOperatorship.class)
                 .addProp("asset").asAutocompleter().also()
                 .addProp("startDate").asDatePicker().also()
                 .addProp("role").asAutocompleter().also()
@@ -123,6 +122,6 @@ public class AssetOwnershipWebUiConfig {
                 .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 480, Unit.PX))
                 .done();
 
-        return new EntityMaster<>(AssetOwnership.class, masterConfig, injector);
+        return new EntityMaster<>(AssetOperatorship.class, masterConfig, injector);
     }
 }

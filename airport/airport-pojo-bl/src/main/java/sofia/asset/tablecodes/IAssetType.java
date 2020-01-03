@@ -18,5 +18,6 @@ public interface IAssetType extends IEntityDao<AssetType> {
                                                                   "currOwnership.org", "currOwnership.startDate")
                                                             .with("currManagement.role", "currManagement.bu", 
                                                                   "currManagement.org", "currManagement.startDate");
-      
+                                                            .with("currOperatorship.role", "currOperatorship.bu", 
+                                                                  "currOperatorship.org", "currOperatorship.startDate");
 }

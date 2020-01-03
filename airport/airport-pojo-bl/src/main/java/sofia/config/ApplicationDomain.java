@@ -28,6 +28,7 @@ import sofia.asset.tablecodes.AssetTypeOwnership;
 import sofia.asset.tablecodes.AssetTypeManagement;
 import sofia.asset.tablecodes.AssetTypeOperatorship;
 import sofia.asset.tablecodes.AssetOwnership;
+import sofia.asset.tablecodes.AssetTypeOperatorship;
 import sofia.asset.tablecodes.AssetManagement;
 
 /**
@@ -60,7 +61,7 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(AssetTypeOwnership.class);
         add(AssetTypeManagement.class);
         add(AssetTypeOperatorship.class);
-
+        add(AssetOperatorship.class);
         add(AssetOwnership.class);
         add(AssetManagement.class);
     }

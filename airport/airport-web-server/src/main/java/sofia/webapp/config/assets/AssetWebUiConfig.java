@@ -113,7 +113,7 @@ public class AssetWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<Asset> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkVarGridForMasterFitWidth(1, 1, 2, 4, 4, 3);
+        final String layout = LayoutComposer.mkVarGridForMasterFitWidth(1, 1, 2, 4, 4, 4, 4, 3);
 
         final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
                 .addProp("number").asSinglelineText().also()
@@ -128,6 +128,14 @@ public class AssetWebUiConfig {
                 .addProp("currOwnership.bu").asAutocompleter().also()
                 .addProp("currOwnership.org").asAutocompleter().also()
                 .addProp("currOwnership.startDate").asDatePicker().also()
+                .addProp("assetType.currOperatorship.role").asAutocompleter().also()
+                .addProp("assetType.currOperatorship.bu").asAutocompleter().also()
+                .addProp("assetType.currOperatorship.org").asAutocompleter().also()
+                .addProp("assetType.currOperatorship.startDate").asDatePicker().also()
+                .addProp("currOperatorship.role").asAutocompleter().also()
+                .addProp("currOperatorship.bu").asAutocompleter().also()
+                .addProp("currOperatorship.org").asAutocompleter().also()
+                .addProp("currOperatorship.startDate").asDatePicker().also()
                 .addProp("regulatory").asCheckbox().also()
                 .addProp("keyService").asCheckbox().also()
                 .addProp("loadingRate").asSinglelineText().also()

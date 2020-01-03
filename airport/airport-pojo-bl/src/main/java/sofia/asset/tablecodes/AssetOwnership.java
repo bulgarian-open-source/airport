@@ -44,9 +44,5 @@ public class AssetOwnership extends AbstractOwnership {
 
     public Asset getAsset() {
         return asset;
-    }
-
-    
-
-    
+    }  
 }

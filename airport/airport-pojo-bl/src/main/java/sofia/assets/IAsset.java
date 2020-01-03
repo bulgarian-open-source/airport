@@ -18,5 +18,7 @@ public interface IAsset extends IEntityDao<Asset> {
             .with("currOwnership.role", "currOwnership.bu", "currOwnership.org", "currOwnership.startDate")
             .with("assetType.currManagement.role", "assetType.currManagement.bu", "assetType.currManagement.org", "assetType.currManagement.startDate")
             .with("currManagement.role", "currManagement.bu", "currManagement.org", "currManagement.startDate");;
+            .with("assetType.currOperatorship.role", "assetType.currOperatorship.bu", "assetType.currOperatorship.org", "assetType.currOperatorship.startDate")
+            .with("currOperatorship.role", "currOperatorship.bu", "currOperatorship.org", "currOperatorship.startDate");
 
 }

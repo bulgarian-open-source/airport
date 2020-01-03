@@ -5,6 +5,7 @@ import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.selec
 
 import sofia.asset.tablecodes.AssetClass;
 import sofia.asset.tablecodes.AssetManagement;
+import sofia.asset.tablecodes.AssetOperatorship;
 import sofia.asset.tablecodes.AssetOwnership;
 import sofia.asset.tablecodes.AssetType;
 import sofia.asset.tablecodes.AssetTypeOwnership;
@@ -71,7 +72,11 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Subtitles({@PathTitle(path="currOwnership.role", title="Type Ownership Role"),
                 @PathTitle(path="currOwnership.bu", title="Type Ownership Business Unit"),
                 @PathTitle(path="currOwnership.org", title="Type Ownership Organization"),
-                @PathTitle(path="currOwnership.startDate", title="Type Ownership Start Date")})
+                @PathTitle(path="currOwnership.startDate", title="Type Ownership Start Date"),
+                @PathTitle(path="currOperatorship.role", title="Type Operatorship Role"),
+                @PathTitle(path="currOperatorship.bu", title="Type Operatorship Business Unit"),
+                @PathTitle(path="currOperatorship.org", title="Type Operatorship Organization"),
+                @PathTitle(path="currOperatorship.startDate", title="Type Operatorship Start Date")})
     private AssetType assetType;
     
     @IsProperty
@@ -117,12 +122,8 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @IsProperty
     @Readonly
     @Calculated
-    @Title(value = "Curr Ownership", desc = "Desc")
-    @Subtitles({@PathTitle(path="role", title="Ownership Role"),
-                @PathTitle(path="bu", title="Ownership Business Unit"),
-                @PathTitle(path="org", title="Ownership Organization"),
-                @PathTitle(path="startDate", title="Ownership Start Date"),
-                @PathTitle(path="role", title="Management Role"),
+    @Title(value = "Curr Management", desc = "Desc")
+    @Subtitles({@PathTitle(path="role", title="Management Role"),
                 @PathTitle(path="bu", title="Management Business Unit"),
                 @PathTitle(path="org", title="Management Organization"),
                 @PathTitle(path="startDate", title="Management Start Date")})
@@ -147,6 +148,26 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public AssetManagement getCurrManagement() {
         return currManagement;
     }
+  
+    @IsProperty
+    @Readonly
+    @Calculated
+    @Title(value = "Curr Operatorship", desc = "Desc")
+    @Subtitles({@PathTitle(path="role", title="Operatorship Role"),
+                @PathTitle(path="bu", title="Operatorship Business Unit"),
+                @PathTitle(path="org", title="Operatorship Organization"),
+                @PathTitle(path="startDate", title="Operatorship Start Date")})
+    private AssetOperatorship currOperatorship;
+    
+    private static final EntityResultQueryModel<AssetOperatorship> operatorshipSubQuery = select(AssetOperatorship.class).where()
+                                                                                .prop("asset").eq().extProp("asset").and()
+                                                                                .prop("startDate").le().now().and()
+                                                                                .prop("startDate").gt().extProp("startDate").model();
+            
+    protected static final ExpressionModel currOperatorship_ = expr().model(select(AssetOperatorship.class)
+                                                            .where().prop("asset").eq().extProp("id").and()
+                                                            .prop("startDate").le().now().and()
+                                                            .notExists(operatorshipSubQuery).model()).model();
 
     @Observable
     protected Asset setCurrOwnership(final AssetOwnership currOwnership) {
@@ -157,6 +178,17 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public AssetOwnership getCurrOwnership() {
         return currOwnership;
     }
+    
+    @Observable
+    protected Asset setCurrOperatorship(final AssetOperatorship currOperatorship) {
+        this.currOperatorship = currOperatorship;
+        return this;
+    }
+
+    public AssetOperatorship getCurrOperatorship() {
+        return currOperatorship;
+    }
+
 
 
     @Observable
