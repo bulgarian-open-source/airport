@@ -19,6 +19,7 @@ public class AssetOwnershipDao extends CommonEntityDao<AssetOwnership> implement
     public AssetOwnershipDao(final IFilter filter) {
         super(filter);
     }
+    
    @Override
     public AssetOwnership new_() {
        final AssetOwnership ownership = super.new_();
