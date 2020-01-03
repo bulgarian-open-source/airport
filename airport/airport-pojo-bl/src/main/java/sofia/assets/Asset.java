@@ -4,6 +4,7 @@ import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.expr;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
 
 import sofia.asset.tablecodes.AssetClass;
+import sofia.asset.tablecodes.AssetManagement;
 import sofia.asset.tablecodes.AssetOperatorship;
 import sofia.asset.tablecodes.AssetOwnership;
 import sofia.asset.tablecodes.AssetType;
@@ -108,7 +109,7 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
                 @PathTitle(path="startDate", title="Ownership Start Date")})
     private AssetOwnership currOwnership;
     
-    private static final EntityResultQueryModel<AssetOwnership> subQuery = select(AssetOwnership.class).where()
+    private static final EntityResultQueryModel<AssetOwnership> ownershipSubQuery = select(AssetOwnership.class).where()
                                                                                 .prop("asset").eq().extProp("asset").and()
                                                                                 .prop("startDate").le().now().and()
                                                                                 .prop("startDate").gt().extProp("startDate").model();
@@ -116,8 +117,38 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     protected static final ExpressionModel currOwnership_ = expr().model(select(AssetOwnership.class)
                                                             .where().prop("asset").eq().extProp("id").and()
                                                             .prop("startDate").le().now().and()
-                                                            .notExists(subQuery).model()).model();
+                                                            .notExists(ownershipSubQuery).model()).model();
     
+    @IsProperty
+    @Readonly
+    @Calculated
+    @Title(value = "Curr Management", desc = "Desc")
+    @Subtitles({@PathTitle(path="role", title="Management Role"),
+                @PathTitle(path="bu", title="Management Business Unit"),
+                @PathTitle(path="org", title="Management Organization"),
+                @PathTitle(path="startDate", title="Management Start Date")})
+    private AssetManagement currManagement;
+
+    private static final EntityResultQueryModel<AssetManagement> managementSubQuery = select(AssetManagement.class).where()
+                                                                                .prop("asset").eq().extProp("asset").and()
+                                                                                .prop("startDate").le().now().and()
+                                                                                .prop("startDate").gt().extProp("startDate").model();
+
+    protected static final ExpressionModel currManagement_ = expr().model(select(AssetManagement.class)
+                                                            .where().prop("asset").eq().extProp("id").and()
+                                                            .prop("startDate").le().now().and()
+                                                            .notExists(managementSubQuery).model()).model();
+
+    @Observable
+    protected Asset setCurrManagement(final AssetManagement currManagement) {
+        this.currManagement = currManagement;
+        return this;
+    }
+
+    public AssetManagement getCurrManagement() {
+        return currManagement;
+    }
+  
     @IsProperty
     @Readonly
     @Calculated
@@ -128,7 +159,7 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
                 @PathTitle(path="startDate", title="Operatorship Start Date")})
     private AssetOperatorship currOperatorship;
     
-    private static final EntityResultQueryModel<AssetOperatorship> subQuery_op = select(AssetOperatorship.class).where()
+    private static final EntityResultQueryModel<AssetOperatorship> operatorshipSubQuery = select(AssetOperatorship.class).where()
                                                                                 .prop("asset").eq().extProp("asset").and()
                                                                                 .prop("startDate").le().now().and()
                                                                                 .prop("startDate").gt().extProp("startDate").model();
@@ -136,7 +167,7 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     protected static final ExpressionModel currOperatorship_ = expr().model(select(AssetOperatorship.class)
                                                             .where().prop("asset").eq().extProp("id").and()
                                                             .prop("startDate").le().now().and()
-                                                            .notExists(subQuery_op).model()).model();
+                                                            .notExists(operatorshipSubQuery).model()).model();
 
     @Observable
     protected Asset setCurrOwnership(final AssetOwnership currOwnership) {
