@@ -11,6 +11,7 @@ import sofia.service.tablecodes.AssetServiceStatus;
 import sofia.service.tablecodes.ConditionRating;
 import sofia.service.tablecodes.ServiceStatus;
 import sofia.asset.tablecodes.AssetClass;
+import sofia.asset.tablecodes.AssetManagement;
 import sofia.asset.tablecodes.AssetOwnership;
 import sofia.asset.tablecodes.AssetType;
 import sofia.asset.tablecodes.AssetTypeOperatorship;
@@ -19,6 +20,7 @@ import sofia.asset.tablecodes.AssetTypeOwnership;
 import sofia.assets.Asset;
 import sofia.assets.AssetFinDet;
 import sofia.webapp.config.asset.tablecodes.AssetClassWebUiConfig;
+import sofia.webapp.config.asset.tablecodes.AssetManagementWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetOwnershipWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeOperatorshipWebUiConfig;
 import sofia.webapp.config.asset.tablecodes.AssetTypeManagementWebUiConfig;
@@ -113,6 +115,8 @@ public class WebUiConfig extends AbstractWebUiConfig {
         final AssetWebUiConfig assetWebUiConfig = AssetWebUiConfig.register(injector(), builder);
         final AssetFinDetWebUiConfig assetFinDetWebUiConfig = AssetFinDetWebUiConfig.register(injector(), builder);
         final AssetOwnershipWebUiConfig assetOwnershipWebUiConfig = AssetOwnershipWebUiConfig.register(injector(), builder);
+        final AssetManagementWebUiConfig assetManagementWebUiConfig = AssetManagementWebUiConfig.register(injector(), builder);
+
 
         
         // Organizational
@@ -151,6 +155,7 @@ public class WebUiConfig extends AbstractWebUiConfig {
             .addMenuItem(Asset.ENTITY_TITLE).description(String.format("%s Centre", Asset.ENTITY_TITLE)).centre(assetWebUiConfig.centre).done()
             .addMenuItem(AssetFinDet.ENTITY_TITLE).description(String.format("%s Centre", AssetFinDet.ENTITY_TITLE)).centre(assetFinDetWebUiConfig.centre).done()
             .addMenuItem(AssetOwnership.ENTITY_TITLE).description(String.format("%s Centre", AssetOwnership.ENTITY_TITLE)).centre(assetOwnershipWebUiConfig.centre).done()
+            .addMenuItem(AssetManagement.ENTITY_TITLE).description(String.format("%s Centre", AssetManagement.ENTITY_TITLE)).centre(assetManagementWebUiConfig.centre).done()
             .addMenuItem(Project.ENTITY_TITLE).description(String.format("%s Centre", Project.ENTITY_TITLE)).centre(projectWebUiConfig.centre).done()
             .done().done().
         addModule("Users / Personnel").

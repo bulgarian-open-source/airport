@@ -121,7 +121,11 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Subtitles({@PathTitle(path="role", title="Ownership Role"),
                 @PathTitle(path="bu", title="Ownership Business Unit"),
                 @PathTitle(path="org", title="Ownership Organization"),
-                @PathTitle(path="startDate", title="Ownership Start Date")})
+                @PathTitle(path="startDate", title="Ownership Start Date"),
+                @PathTitle(path="role", title="Management Role"),
+                @PathTitle(path="bu", title="Management Business Unit"),
+                @PathTitle(path="org", title="Management Organization"),
+                @PathTitle(path="startDate", title="Management Start Date")})
     private AssetManagement currManagement;
 
     private static final EntityResultQueryModel<AssetManagement> managementSubQuery = select(AssetManagement.class).where()
