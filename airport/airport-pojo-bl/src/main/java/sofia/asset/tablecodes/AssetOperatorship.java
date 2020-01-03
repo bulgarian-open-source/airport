@@ -2,11 +2,11 @@ package sofia.asset.tablecodes;
 
 import sofia.assets.Asset;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
+import ua.com.fielden.platform.entity.annotation.KeyType;
+import ua.com.fielden.platform.entity.annotation.KeyTitle;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
 import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
 import ua.com.fielden.platform.entity.annotation.IsProperty;
-import ua.com.fielden.platform.entity.annotation.KeyTitle;
-import ua.com.fielden.platform.entity.annotation.KeyType;
 import ua.com.fielden.platform.entity.annotation.MapEntityTo;
 import ua.com.fielden.platform.entity.annotation.MapTo;
 import ua.com.fielden.platform.entity.annotation.Observable;
@@ -22,17 +22,17 @@ import ua.com.fielden.platform.utils.Pair;
  */
 @KeyType(DynamicEntityKey.class)
 @KeyTitle("Key")
-@CompanionObject(IAssetOwnership.class)
+@CompanionObject(IAssetOperatorship.class)
 @MapEntityTo
-public class AssetOperatorship extends AbstractOwnership {
+public class AssetOperatorship extends AbstractOperatorship {
 
     private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetOperatorship.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
-
+    
     @IsProperty
     @MapTo
-    @Title(value = "Asset", desc = "Asset referenced in this ownership")
+    @Title(value = "Asset", desc = "Asset referenced in this operatorship")
     @CompositeKeyMember(1)
     private Asset asset;
 
@@ -46,7 +46,4 @@ public class AssetOperatorship extends AbstractOwnership {
         return asset;
     }
 
-    
-
-    
 }

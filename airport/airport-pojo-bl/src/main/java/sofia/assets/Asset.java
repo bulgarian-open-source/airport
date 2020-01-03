@@ -4,6 +4,7 @@ import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.expr;
 import static ua.com.fielden.platform.entity.query.fluent.EntityQueryUtils.select;
 
 import sofia.asset.tablecodes.AssetClass;
+import sofia.asset.tablecodes.AssetOperatorship;
 import sofia.asset.tablecodes.AssetOwnership;
 import sofia.asset.tablecodes.AssetType;
 import sofia.asset.tablecodes.AssetTypeOwnership;
@@ -112,6 +113,26 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
                                                             .where().prop("asset").eq().extProp("id").and()
                                                             .prop("startDate").le().now().and()
                                                             .notExists(subQuery).model()).model();
+    
+    @IsProperty
+    @Readonly
+    @Calculated
+    @Title(value = "Curr Operatorship", desc = "Desc")
+    @Subtitles({@PathTitle(path="role", title="Operatorship Role"),
+                @PathTitle(path="bu", title="Operatorship Business Unit"),
+                @PathTitle(path="org", title="Operatorship Organization"),
+                @PathTitle(path="startDate", title="Operatorship Start Date")})
+    private AssetOperatorship currOperatorship;
+    
+    private static final EntityResultQueryModel<AssetOperatorship> subQuery_op = select(AssetOperatorship.class).where()
+                                                                                .prop("asset").eq().extProp("asset").and()
+                                                                                .prop("startDate").le().now().and()
+                                                                                .prop("startDate").gt().extProp("startDate").model();
+            
+    protected static final ExpressionModel currOperatorship_ = expr().model(select(AssetOperatorship.class)
+                                                            .where().prop("asset").eq().extProp("id").and()
+                                                            .prop("startDate").le().now().and()
+                                                            .notExists(subQuery_op).model()).model();
 
     @Observable
     protected Asset setCurrOwnership(final AssetOwnership currOwnership) {
@@ -122,6 +143,17 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     public AssetOwnership getCurrOwnership() {
         return currOwnership;
     }
+    
+    @Observable
+    protected Asset setCurrOperatorship(final AssetOperatorship currOperatorship) {
+        this.currOperatorship = currOperatorship;
+        return this;
+    }
+
+    public AssetOperatorship getCurrOperatorship() {
+        return currOperatorship;
+    }
+
 
 
     @Observable

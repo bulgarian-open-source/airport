@@ -14,5 +14,4 @@ public interface IAssetOperatorship extends IEntityDao<AssetOperatorship> {
 
     static final IFetchProvider<AssetOperatorship> FETCH_PROVIDER = EntityUtils.fetch(AssetOperatorship.class)
             .with("asset", "role", "bu", "org", "startDate");
-
 }

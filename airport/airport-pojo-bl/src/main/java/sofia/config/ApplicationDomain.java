@@ -28,6 +28,7 @@ import sofia.asset.tablecodes.AssetTypeOwnership;
 import sofia.asset.tablecodes.AssetTypeManagement;
 import sofia.asset.tablecodes.AssetTypeOperatorship;
 import sofia.asset.tablecodes.AssetOwnership;
+import sofia.asset.tablecodes.AssetOperatorship;
 
 /**
  * A class to register domain entities.
@@ -61,6 +62,7 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(AssetTypeOperatorship.class);
 
         add(AssetOwnership.class);
+        add(AssetOperatorship.class);
     }
 
     private static void add(final Class<? extends AbstractEntity<?>> domainType) {
