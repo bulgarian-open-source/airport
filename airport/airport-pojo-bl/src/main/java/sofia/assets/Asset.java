@@ -71,7 +71,11 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @Subtitles({@PathTitle(path="currOwnership.role", title="Type Ownership Role"),
                 @PathTitle(path="currOwnership.bu", title="Type Ownership Business Unit"),
                 @PathTitle(path="currOwnership.org", title="Type Ownership Organization"),
-                @PathTitle(path="currOwnership.startDate", title="Type Ownership Start Date")})
+                @PathTitle(path="currOwnership.startDate", title="Type Ownership Start Date"),
+                @PathTitle(path="currOperatorship.role", title="Type Operatorship Role"),
+                @PathTitle(path="currOperatorship.bu", title="Type Operatorship Business Unit"),
+                @PathTitle(path="currOperatorship.org", title="Type Operatorship Organization"),
+                @PathTitle(path="currOperatorship.startDate", title="Type Operatorship Start Date")})
     private AssetType assetType;
     
     @IsProperty
