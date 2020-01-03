@@ -1,6 +1,7 @@
 package sofia.asset.tablecodes;
 
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -17,6 +18,7 @@ import sofia.organizational.Role;
 import sofia.test_config.AbstractDaoTestCase;
 import sofia.test_config.UniversalConstantsForTesting;
 import ua.com.fielden.platform.dao.exceptions.EntityAlreadyExists;
+import ua.com.fielden.platform.utils.EntityUtils;
 import ua.com.fielden.platform.utils.IUniversalConstants;
 
 /**
@@ -30,7 +32,7 @@ import ua.com.fielden.platform.utils.IUniversalConstants;
 public class AssetTypeOperatorshipTest extends AbstractDaoTestCase {
     
     @Test
-    public void ownerhip_with_either_role_or_bu_or_org_is_acceptable() {
+    public void operatorship_with_either_role_or_bu_or_org_is_acceptable() {
         final AssetType at1 = co(AssetType.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<AssetType>fetchFor("assetType").fetchModel(), "AT1");
         final Role r1 = co(Role.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<Role>fetchFor("role").fetchModel(), "R1");
         final BusinessUnit bu1 = co(BusinessUnit.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<BusinessUnit>fetchFor("bu").fetchModel(), "BU1");
@@ -53,7 +55,7 @@ public class AssetTypeOperatorshipTest extends AbstractDaoTestCase {
     }
     
     @Test
-    public void different_ownerhip_for_the_same_asset_type_on_the_same_date_is_not_permitted() {
+    public void different_operatorship_for_the_same_asset_type_on_the_same_date_is_not_permitted() {
         final AssetType at1 = co(AssetType.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<AssetType>fetchFor("assetType").fetchModel(), "AT1");
         final Role r1 = co(Role.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<Role>fetchFor("role").fetchModel(), "R1");
         final BusinessUnit bu1 = co(BusinessUnit.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<BusinessUnit>fetchFor("bu").fetchModel(), "BU1");
@@ -178,6 +180,58 @@ public class AssetTypeOperatorshipTest extends AbstractDaoTestCase {
         assertNotNull(save(operatorship).getOrg());
     }
     
+    @Test
+    public void currOperatorship_for_asset_type_finds_the_latest_operatorship() {
+        final AssetType at1 = co(AssetType.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<AssetType>fetchFor("assetType").fetchModel(), "AT1");
+        final Role r1 = co(Role.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<Role>fetchFor("role").fetchModel(), "R1");
+        final BusinessUnit bu1 = co(BusinessUnit.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<BusinessUnit>fetchFor("bu").fetchModel(), "BU1");
+        final Organization org1 = co(Organization.class).findByKeyAndFetch(IAssetTypeOperatorship.FETCH_PROVIDER.<Organization>fetchFor("org").fetchModel(), "ORG1");
+        
+
+        final AssetTypeOperatorship o0 =  save(co(AssetTypeOperatorship.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-11-12 00:00:00"))
+                .setOrg(org1));
+        
+        final AssetTypeOperatorship o1 =  save(co(AssetTypeOperatorship.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-12-01 00:00:00"))
+                .setRole(r1));
+        
+        final AssetTypeOperatorship o2 =  save(co(AssetTypeOperatorship.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-12-02 00:00:00"))
+                .setBu(bu1));
+        
+        final AssetTypeOperatorship o3 =  save(co(AssetTypeOperatorship.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2019-12-13 00:00:00"))
+                .setOrg(org1));
+        
+        final AssetTypeOperatorship o4 =  save(co(AssetTypeOperatorship.class).new_()
+                .setAssetType(at1)
+                .setStartDate(date("2020-01-01 00:00:00"))
+                .setBu(bu1));
+        
+        final UniversalConstantsForTesting constants = (UniversalConstantsForTesting) getInstance(IUniversalConstants.class);
+        constants.setNow(dateTime("2019-11-01 11:30:00"));
+        
+        final AssetType at1WithCurrOperatorship1 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOperatorship").fetchModel());
+        assertNull(at1WithCurrOperatorship1.getCurrOperatorship());
+        
+        constants.setNow(dateTime("2019-11-15 11:30:00"));
+        final AssetType at1WithCurrOperatorship2 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOperatorship").fetchModel());
+        assertEquals(o0, at1WithCurrOperatorship2.getCurrOperatorship());
+        
+        constants.setNow(dateTime("2019-12-01 11:30:00"));
+        final AssetType at1WithCurrOperatorship3 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOperatorship").fetchModel());
+        assertEquals(o1, at1WithCurrOperatorship3.getCurrOperatorship());
+        
+        constants.setNow(dateTime("2020-02-01 11:30:00"));
+        final AssetType at1WithCurrOperatorship4 = co(AssetType.class).findById(at1.getId(), EntityUtils.fetch(AssetType.class).with("currOperatorship").fetchModel());
+        assertEquals(o4, at1WithCurrOperatorship4.getCurrOperatorship());   
+    }
+    
     @Override
     public boolean saveDataPopulationScriptToFile() {
         return true;
@@ -197,7 +251,7 @@ public class AssetTypeOperatorshipTest extends AbstractDaoTestCase {
         // In this case the notion of now is overridden, which makes it possible to have an invariant system-time.
         // However, the now value should be after AbstractDaoTestCase.prePopulateNow in order not to introduce any date-related conflicts.
         final UniversalConstantsForTesting constants = (UniversalConstantsForTesting) getInstance(IUniversalConstants.class);
-        constants.setNow(dateTime("2019-10-01 11:30:00"));
+        constants.setNow(dateTime("2019-12-01 11:30:00"));
 
         // If the use of saved data population script is indicated then there is no need to proceed with any further data population logic.
         if (useSavedDataPopulationScript()) {

@@ -14,7 +14,6 @@ public interface IAssetType extends IEntityDao<AssetType> {
 
     static final IFetchProvider<AssetType> FETCH_PROVIDER = EntityUtils.fetch(AssetType.class)
                                                             .with("name", "desc", "assetClass")
-                                                            .with("currOwnership.role", "currOwnership.bu", 
-                                                                  "currOwnership.org", "currOwnership.startDate");
-      
+                                                            .with("currOwnership.role", "currOwnership.bu", "currOwnership.org", "currOwnership.startDate")
+                                                            .with("currOperatorship.role", "currOperatorship.bu", "currOperatorship.org", "currOperatorship.startDate");
 }

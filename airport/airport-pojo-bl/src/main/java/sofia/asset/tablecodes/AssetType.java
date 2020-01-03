@@ -77,16 +77,27 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
                                                             .where().prop("assetType").eq().extProp("id").and()
                                                             .prop("startDate").le().now().and()
                                                             .notExists(subQuery).model()).model();
-
-    @Observable
-    protected AssetType setCurrOwnership(final AssetTypeOwnership currOwnership) {
-        this.currOwnership = currOwnership;
-        return this;
-    }
-
-    public AssetTypeOwnership getCurrOwnership() {
-        return currOwnership;
-    }
+    
+    @IsProperty
+    @Readonly
+    @Calculated
+    @Title(value = "Curr Operatorship", desc = "Desc")
+    @Subtitles({@PathTitle(path="role", title="Operatorship Role"),
+                @PathTitle(path="bu", title="Operatorship Business Unit"),
+                @PathTitle(path="org", title="Operatorship Organization"),
+                @PathTitle(path="startDate", title="Operatorship Start Date")})
+    private AssetTypeOperatorship currOperatorship;
+    
+    private static final EntityResultQueryModel<AssetTypeOperatorship> subQuery_op = select(AssetTypeOperatorship.class).where()
+                                                                                .prop("assetType").eq().extProp("assetType").and()
+                                                                                .prop("startDate").le().now().and()
+                                                                                .prop("startDate").gt().extProp("startDate").model();
+            
+    protected static final ExpressionModel currOperatorship_ = expr().model(select(AssetTypeOperatorship.class)
+                                                            .where().prop("assetType").eq().extProp("id").and()
+                                                            .prop("startDate").le().now().and()
+                                                            .notExists(subQuery_op).model()).model();
+    
 
 
     @Observable
@@ -124,7 +135,26 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
         super.setActive(active);
         return this;
     }
+    
+    @Observable
+    protected AssetType setCurrOwnership(final AssetTypeOwnership currOwnership) {
+        this.currOwnership = currOwnership;
+        return this;
+    }
 
+    public AssetTypeOwnership getCurrOwnership() {
+        return currOwnership;
+    }
+    
+    @Observable
+    protected AssetType setCurrOperatorship(final AssetTypeOperatorship currOperatorship) {
+        this.currOperatorship = currOperatorship;
+        return this;
+    }
+
+    public AssetTypeOperatorship getCurrOperatorship() {
+        return currOperatorship;
+    }
     
 
 }
