@@ -66,7 +66,11 @@ public class Asset extends ActivatableAbstractEntity<DynamicEntityKey> {
     @IsProperty
     @MapTo
     @Required
-    @Title(value = "assetType", desc = "An asset type for this asset.")
+    @Title(value = "Type", desc = "An asset type for this asset.")
+    @Subtitles({@PathTitle(path="currOwnership.role", title="Type Ownership Role"),
+                @PathTitle(path="currOwnership.bu", title="Type Ownership Business Unit"),
+                @PathTitle(path="currOwnership.org", title="Type Ownership Organization"),
+                @PathTitle(path="currOwnership.startDate", title="Type Ownership Start Date")})
     private AssetType assetType;
     
     @IsProperty
