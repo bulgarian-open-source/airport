@@ -60,7 +60,7 @@ public class AssetOwnershipWebUiConfig {
      * @return created entity centre
      */
     private EntityCentre<AssetOwnership> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkGridForCentre(2, 3);
+        final String layout = LayoutComposer.mkVarGridForCentre(2, 3);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(AssetOwnership.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetOwnership.class);
