@@ -98,15 +98,7 @@ public class AssetType extends ActivatableAbstractEntity<DynamicEntityKey> {
                                                             .prop("startDate").le().now().and()
                                                             .notExists(ownershipSubQuery).model()).model();
 
-    @Observable
-    protected AssetType setCurrOwnership(final AssetTypeOwnership currOwnership) {
-        this.currOwnership = currOwnership;
-        return this;
-    }
 
-    public AssetTypeOwnership getCurrOwnership() {
-        return currOwnership;
-    }
     
     @Observable
     protected AssetType setCurrManagement(final AssetTypeManagement currManagement) {
