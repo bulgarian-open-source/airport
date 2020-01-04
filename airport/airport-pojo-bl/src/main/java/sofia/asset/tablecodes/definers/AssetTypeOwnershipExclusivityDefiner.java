@@ -2,9 +2,12 @@ package sofia.asset.tablecodes.definers;
 
 import java.util.Set;
 
+import sofia.asset.tablecodes.AssetOwnership;
 import sofia.asset.tablecodes.AssetTypeOwnership;
+import ua.com.fielden.platform.entity.AbstractEntity;
 import ua.com.fielden.platform.entity.meta.IAfterChangeEventHandler;
 import ua.com.fielden.platform.entity.meta.MetaProperty;
+import ua.com.fielden.platform.error.Result;
 import ua.com.fielden.platform.utils.CollectionUtil;
 
 public class AssetTypeOwnershipExclusivityDefiner implements IAfterChangeEventHandler<Object> {
@@ -13,9 +16,12 @@ public class AssetTypeOwnershipExclusivityDefiner implements IAfterChangeEventHa
 
     @Override
     public void handle(final MetaProperty<Object> property, final Object value) {
+        if (!(property.getEntity() instanceof AssetOwnership) && !(property.getEntity() instanceof AssetTypeOwnership)) {
+            throw Result.failure("Stringly entities of type AssetOwnership or AssetTypeOwnership are expected");
+        }
         
-       final AssetTypeOwnership ownership = property.getEntity();
-       final boolean allEmpty = ownership.getRole() == null && ownership.getBu() == null && ownership.getOrg() == null;
+       final AbstractEntity<?> ownership = property.getEntity();
+       final boolean allEmpty = ownership.get("role") == null && ownership.get("bu") == null && ownership.get("org") == null;
        
        ownershipPropNames.stream()
                .map(name -> ownership.getProperty(name))

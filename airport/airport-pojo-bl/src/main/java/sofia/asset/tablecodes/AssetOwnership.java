@@ -1,5 +1,6 @@
 package sofia.asset.tablecodes;
 
+import sofia.assets.Asset;
 import ua.com.fielden.platform.entity.DynamicEntityKey;
 import ua.com.fielden.platform.entity.annotation.CompanionObject;
 import ua.com.fielden.platform.entity.annotation.CompositeKeyMember;
@@ -16,32 +17,32 @@ import ua.com.fielden.platform.utils.Pair;
 /**
  * Master entity object.
  *
- * @author Sofia-Team
+ * @author Developers
  *
  */
 @KeyType(DynamicEntityKey.class)
 @KeyTitle("Key")
-@CompanionObject(IAssetTypeOperatorship.class)
+@CompanionObject(IAssetOwnership.class)
 @MapEntityTo
-public class AssetTypeOperatorship extends AbstractOperatorship {
+public class AssetOwnership extends AbstractOwnership {
 
-    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetTypeOperatorship.class);
+    private static final Pair<String, String> entityTitleAndDesc = TitlesDescsGetter.getEntityTitleAndDesc(AssetOwnership.class);
     public static final String ENTITY_TITLE = entityTitleAndDesc.getKey();
     public static final String ENTITY_DESC = entityTitleAndDesc.getValue();
-    
+
     @IsProperty
     @MapTo
-    @Title(value = "Asset Type", desc = "Desc")
+    @Title(value = "Asset", desc = "Asset referenced in this ownership")
     @CompositeKeyMember(1)
-    private AssetType assetType;
-    
+    private Asset asset;
+
     @Observable
-    public AssetTypeOperatorship setAssetType(final AssetType assetType) {
-        this.assetType = assetType;
+    public AssetOwnership setAsset(final Asset asset) {
+        this.asset = asset;
         return this;
     }
 
-    public AssetType getAssetType() {
-        return assetType;
-    }
+    public Asset getAsset() {
+        return asset;
+    }  
 }

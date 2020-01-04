@@ -93,11 +93,12 @@ public class AssetWebUiConfig {
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", Asset.ENTITY_TITLE))
                     .withAction(standardEditAction).also()
                 .addProp("desc").minWidth(50).also()
-                .addProp("finDet.initCost").width(50).also()
-                .addProp("finDet.acquireDate").width(50).also()
-                .addProp("finDet.project").width(50).also()
-                .addProp("regulatory").width(25).also()
-                .addProp("keyService").width(25)
+                .addProp("finDet.initCost").width(80).also()
+                .addProp("finDet.acquireDate").width(150).also()
+                .addProp("finDet.project").width(80).also()
+                .addProp("regulatory").width(80).also()
+                .addProp("keyService").width(80).also()
+                .addProp("loadingRate").width(80)
                 //.addProp("prop").minWidth(100).withActionSupplier(builder.getOpenMasterAction(Entity.class)).also()
                 .addPrimaryAction(standardEditAction)
                 .build();
@@ -112,13 +113,29 @@ public class AssetWebUiConfig {
      * @return created entity master
      */
     private EntityMaster<Asset> createMaster(final Injector injector) {
-        final String layout = LayoutComposer.mkGridForMasterFitWidth(7, 1);
+        final String layout = LayoutComposer.mkVarGridForMasterFitWidth(1, 1, 2, 4, 4, 4, 4, 3);
 
         final IMaster<Asset> masterConfig = new SimpleMasterBuilder<Asset>().forEntity(Asset.class)
                 .addProp("number").asSinglelineText().also()
                 .addProp("desc").asMultilineText().also()
                 .addProp("assetType").asAutocompleter().also()
                 .addProp("active").asCheckbox().also()
+                .addProp("assetType.currOwnership.role").asAutocompleter().also()
+                .addProp("assetType.currOwnership.bu").asAutocompleter().also()
+                .addProp("assetType.currOwnership.org").asAutocompleter().also()
+                .addProp("assetType.currOwnership.startDate").asDatePicker().also()
+                .addProp("currOwnership.role").asAutocompleter().also()
+                .addProp("currOwnership.bu").asAutocompleter().also()
+                .addProp("currOwnership.org").asAutocompleter().also()
+                .addProp("currOwnership.startDate").asDatePicker().also()
+                .addProp("assetType.currOperatorship.role").asAutocompleter().also()
+                .addProp("assetType.currOperatorship.bu").asAutocompleter().also()
+                .addProp("assetType.currOperatorship.org").asAutocompleter().also()
+                .addProp("assetType.currOperatorship.startDate").asDatePicker().also()
+                .addProp("currOperatorship.role").asAutocompleter().also()
+                .addProp("currOperatorship.bu").asAutocompleter().also()
+                .addProp("currOperatorship.org").asAutocompleter().also()
+                .addProp("currOperatorship.startDate").asDatePicker().also()
                 .addProp("regulatory").asCheckbox().also()
                 .addProp("keyService").asCheckbox().also()
                 .addProp("loadingRate").asSinglelineText().also()
@@ -128,7 +145,7 @@ public class AssetWebUiConfig {
                 .setLayoutFor(Device.DESKTOP, Optional.empty(), layout)
                 .setLayoutFor(Device.TABLET, Optional.empty(), layout)
                 .setLayoutFor(Device.MOBILE, Optional.empty(), layout)
-                .withDimensions(mkDim(LayoutComposer.SIMPLE_ONE_COLUMN_MASTER_DIM_WIDTH, 300, Unit.PX))
+                .withDimensions(mkDim(LayoutComposer.SIMPLE_THREE_COLUMN_MASTER_DIM_WIDTH, 520, Unit.PX))
                 .done();
 
         return new EntityMaster<>(Asset.class, masterConfig, injector);

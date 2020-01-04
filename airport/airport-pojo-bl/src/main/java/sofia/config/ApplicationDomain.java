@@ -6,28 +6,30 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import sofia.asset.tablecodes.AssetClass;
+import sofia.asset.tablecodes.AssetManagement;
+import sofia.asset.tablecodes.AssetOperatorship;
+import sofia.asset.tablecodes.AssetOwnership;
+import sofia.asset.tablecodes.AssetType;
+import sofia.asset.tablecodes.AssetTypeManagement;
+import sofia.asset.tablecodes.AssetTypeOperatorship;
+import sofia.asset.tablecodes.AssetTypeOwnership;
+import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
+import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
+import sofia.asset.tablecodes.ui_actions.OpenAssetClassMasterAction;
+import sofia.assets.Asset;
+import sofia.assets.AssetFinDet;
+import sofia.organizational.BusinessUnit;
+import sofia.organizational.Organization;
+import sofia.organizational.Role;
 import sofia.personnel.Person;
 import sofia.projects.Project;
+import sofia.service.tablecodes.AssetServiceStatus;
+import sofia.service.tablecodes.ConditionRating;
+import sofia.service.tablecodes.ServiceStatus;
 import ua.com.fielden.platform.basic.config.IApplicationDomainProvider;
 import ua.com.fielden.platform.domain.PlatformDomainTypes;
 import ua.com.fielden.platform.entity.AbstractEntity;
-import sofia.asset.tablecodes.AssetClass;
-import sofia.asset.tablecodes.AssetType;
-import sofia.service.tablecodes.ServiceStatus;
-import sofia.assets.Asset;
-import sofia.asset.tablecodes.ui_actions.OpenAssetClassMasterAction;
-import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenMain_MenuItem;
-import sofia.asset.tablecodes.master.menu.actions.AssetClassMaster_OpenAssetType_MenuItem;
-import sofia.service.tablecodes.AssetServiceStatus;
-import sofia.service.tablecodes.ConditionRating;
-import sofia.assets.AssetFinDet;
-import sofia.organizational.Role;
-import sofia.organizational.BusinessUnit;
-import sofia.organizational.Organization;
-import sofia.asset.tablecodes.AssetTypeOwnership;
-import sofia.asset.tablecodes.AssetTypeManagement;
-import sofia.asset.tablecodes.AssetTypeOperatorship;
-
 
 /**
  * A class to register domain entities.
@@ -59,7 +61,9 @@ public class ApplicationDomain implements IApplicationDomainProvider {
         add(AssetTypeOwnership.class);
         add(AssetTypeManagement.class);
         add(AssetTypeOperatorship.class);
-
+        add(AssetOperatorship.class);
+        add(AssetOwnership.class);
+        add(AssetManagement.class);
     }
 
     private static void add(final Class<? extends AbstractEntity<?>> domainType) {
