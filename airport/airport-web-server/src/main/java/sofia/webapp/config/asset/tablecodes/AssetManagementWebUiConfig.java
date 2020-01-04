@@ -57,7 +57,7 @@ public class AssetManagementWebUiConfig {
      * @return created entity centre
      */
     private EntityCentre<AssetManagement> createCentre(final Injector injector, final IWebUiBuilder builder) {
-        final String layout = LayoutComposer.mkGridForCentre(2, 3);
+        final String layout = LayoutComposer.mkVarGridForCentre(2, 3);
 
         final EntityActionConfig standardNewAction = StandardActions.NEW_ACTION.mkAction(AssetManagement.class);
         final EntityActionConfig standardDeleteAction = StandardActions.DELETE_ACTION.mkAction(AssetManagement.class);
