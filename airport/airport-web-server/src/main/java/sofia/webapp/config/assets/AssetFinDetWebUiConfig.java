@@ -5,6 +5,7 @@ import static sofia.common.StandardScrollingConfigs.standardStandaloneScrollingC
 
 import java.util.Optional;
 
+
 import com.google.inject.Injector;
 
 import sofia.assets.Asset;
@@ -22,6 +23,7 @@ import ua.com.fielden.platform.web.view.master.api.impl.SimpleMasterBuilder;
 import ua.com.fielden.platform.web.view.master.api.IMaster;
 import ua.com.fielden.platform.web.app.config.IWebUiBuilder;
 import sofia.main.menu.assets.MiAssetFinDet;
+import sofia.projects.Project;
 import ua.com.fielden.platform.web.centre.EntityCentre;
 import ua.com.fielden.platform.web.view.master.EntityMaster;
 import static ua.com.fielden.platform.web.PrefDim.mkDim;
@@ -80,6 +82,7 @@ public class AssetFinDetWebUiConfig {
                     .withSummary("total_count_", "COUNT(SELF)", format("Count:The total number of matching %ss.", AssetFinDet.ENTITY_TITLE))
                     .withActionSupplier(builder.getOpenMasterAction(Asset.class)).also()
                 .addProp("key.desc").minWidth(200).also()
+                .addEditableProp("project").width(250).withActionSupplier(builder.getOpenMasterAction(Project.class)).also()
                 .addEditableProp("initCost").width(150)
                 	.withSummary("total_init_cost_", "SUM(initCost)", "Total: Total initial cost for selected assets.").also()
                 .addEditableProp("acquireDate").width(150)
